@@ -420,39 +420,130 @@
 
     <script>
         const QUIZZES = {
-            "matematica": {
-                icon: "mdi-math-compass",
-                title: "Matemática",
-                questions: [
-                    { q: "Qual é o resultado da expressão: 5 x (8 - 3) + 2?", a: "27", b: "25", c: "30", d: "42", correct: "a" },
-                    { q: "Se um trem viaja a 60 km/h, quantos quilômetros ele percorre em 30 minutos?", a: "20 km", b: "30 km", c: "60 km", d: "120 km", correct: "b" },
-                    { q: "Qual é o valor de X na equação: 2X + 5 = 15?", a: "5", b: "10", c: "2", d: "4", correct: "a" },
-                    { q: "Qual é o próximo número na sequência: 1, 4, 9, 16, ...?", a: "20", b: "25", c: "30", d: "36", correct: "b" },
-                    { q: "Quantos lados tem um heptágono?", a: "5", b: "6", c: "7", d: "8", correct: "c" },
-                    { q: "Arredonde 3,14159 para duas casas decimais.", a: "3,14", b: "3,15", c: "3,10", d: "3,20", correct: "a" },
-                    { q: "Calcule a área de um quadrado com lado de 4cm.", a: "8 cm²", b: "12 cm²", c: "16 cm²", d: "20 cm²", correct: "c" },
-                    { q: "O que é 15% de 200?", a: "15", b: "20", c: "30", d: "45", correct: "c" },
-                    { q: "Qual o maior divisor comum de 12 e 18?", a: "2", b: "3", c: "6", d: "9", correct: "c" },
-                    { q: "Se 4 maçãs custam R$ 8,00, quanto custam 7 maçãs?", a: "R$ 10,00", b: "R$ 12,00", c: "R$ 14,00", d: "R$ 16,00", correct: "c" },
-                ]
-            },
-            "portugues": {
-                icon: "mdi-book-open-page-variant",
-                title: "Português",
-                questions: [
-                    { q: "Qual palavra está escrita incorretamente?", a: "Exceção", b: "Ascensão", c: "Excessão", d: "Precedente", correct: "c" },
-                    { q: "Em qual frase o 'haja' está conjugado corretamente?", a: "Talvez ele haja estudado o suficiente.", b: "Haja visto que ele chegou atrasado...", c: "Se não haja tempo, faremos depois.", d: "Ele haja de ter sorte.", correct: "a" },
-                    { q: "Qual é o plural correto de 'guarda-chuva'?", a: "Guarda-chuvas", b: "Guardas-chuvas", c: "Guarda-chuva", d: "Guardas-chuva", correct: "a" },
-                    { q: "Qual figura de linguagem consiste em usar uma parte para representar o todo?", a: "Metáfora", b: "Metonímia", c: "Hipérbole", d: "Ironia", correct: "b" },
-                    { q: "Complete: 'A ___ dos fatos foi comprovada.'", a: "veracidade", b: "verassidade", c: "veracídade", d: "verassídade", correct: "a" },
-                    { q: "O prefixo 'anti-' em 'antissocial' indica:", a: "Anterioridade", b: "Oposição", c: "Repetição", d: "Afastamento", correct: "b" },
-                    { q: "Qual classe gramatical a palavra 'muito' pertence na frase 'Ele comeu muito'?", a: "Adjetivo", b: "Substantivo", c: "Advérbio", d: "Pronome", correct: "c" },
-                    { q: "A concordância em 'Havia muitos problemas' está correta. Por quê?", a: "O verbo 'haver' sempre concorda com o sujeito.", b: "O verbo 'haver' no sentido de existir é impessoal.", c: "O verbo 'haver' concorda com 'muitos problemas'.", d: "A frase está errada, deveria ser 'Haviam'.", correct: "b" },
-                    { q: "O que significa 'procrastinar'?", a: "Fazer algo com pressa.", b: "Adiar ou deixar para depois.", c: "Ser muito eficiente.", d: "Entender rapidamente.", correct: "b" },
-                    { q: "O que é um 'pleonasmo'?", a: "Uma figura de som.", b: "Repetição desnecessária de uma ideia.", c: "Uso de palavras com sentido oposto.", d: "Substituição de um nome por um apelido.", correct: "b" },
-                ]
-            }
-        };
+  "matematica": {
+    icon: "mdi-math-compass",
+    title: "Matemática",
+    questions: [
+      // OPERAÇÕES BÁSICAS
+      { q: "Qual é o resultado de 15 + 8 × 2?", a: "46", b: "31", c: "23", d: "42", correct: "b" },
+      { q: "Resolva: (9 + 3) × 2 – 4 =", a: "20", b: "16", c: "24", d: "22", correct: "a" },
+      { q: "Quanto é 100 ÷ (4 × 5)?", a: "4", b: "5", c: "6", d: "10", correct: "b" },
+      { q: "Calcule: 3² + 4² =", a: "12", b: "25", c: "7", d: "20", correct: "b" },
+      { q: "Quanto é 18 ÷ 3 + 6 × 2?", a: "14", b: "18", c: "22", d: "12", correct: "b" },
+      { q: "Qual é o resultado de 7 × (5 + 2)?", a: "49", b: "35", c: "21", d: "42", correct: "a" },
+      { q: "Resolva: (50 – 10) ÷ 4 =", a: "8", b: "10", c: "12", d: "20", correct: "b" },
+      { q: "Qual é o sucessor de 1999?", a: "2000", b: "1998", c: "1997", d: "2001", correct: "a" },
+      { q: "Se 4 × X = 24, então X =", a: "5", b: "6", c: "8", d: "7", correct: "b" },
+      { q: "Qual o dobro de 3,5?", a: "6", b: "7", c: "7,5", d: "8", correct: "b" },
+
+      // PORCENTAGEM
+      { q: "Quanto é 20% de 150?", a: "25", b: "30", c: "35", d: "40", correct: "b" },
+      { q: "Um produto custa R$200 e teve desconto de 15%. Qual é o novo preço?", a: "R$180", b: "R$170", c: "R$190", d: "R$150", correct: "a" },
+      { q: "Um aumento de 10% em R$300 resulta em:", a: "R$310", b: "R$330", c: "R$320", d: "R$305", correct: "b" },
+      { q: "50% de 80 equivale a:", a: "30", b: "40", c: "50", d: "60", correct: "b" },
+      { q: "Um celular passou de R$1000 para R$850. Qual foi o desconto percentual?", a: "15%", b: "20%", c: "10%", d: "25%", correct: "b" },
+      { q: "60% de 200 equivale a:", a: "100", b: "110", c: "120", d: "140", correct: "c" },
+      { q: "Um aumento de 25% sobre 80 é:", a: "85", b: "90", c: "100", d: "120", correct: "c" },
+      { q: "40% de 250 é:", a: "100", b: "90", c: "110", d: "80", correct: "a" },
+      { q: "10% de 350 equivale a:", a: "35", b: "30", c: "45", d: "40", correct: "a" },
+      { q: "75% de 200 é:", a: "100", b: "120", c: "150", d: "180", correct: "c" },
+
+      // FRAÇÕES
+      { q: "Qual é o resultado de 1/2 + 1/4?", a: "3/4", b: "2/6", c: "1/3", d: "2/3", correct: "a" },
+      { q: "Resolva: 2/3 – 1/6 =", a: "1/2", b: "1/3", c: "2/6", d: "5/6", correct: "a" },
+      { q: "Qual é o dobro de 3/4?", a: "3/2", b: "1/2", c: "6/4", d: "1/3", correct: "a" },
+      { q: "Qual é o resultado de 2/5 × 10?", a: "2", b: "3", c: "4", d: "5", correct: "d" },
+      { q: "3/4 de 100 equivale a:", a: "60", b: "70", c: "75", d: "80", correct: "c" },
+      { q: "Qual fração representa 0,25?", a: "1/2", b: "1/3", c: "1/4", d: "3/4", correct: "c" },
+      { q: "1/5 de 200 é:", a: "20", b: "30", c: "40", d: "50", correct: "d" },
+      { q: "Simplifique 6/9:", a: "2/3", b: "3/4", c: "1/3", d: "4/5", correct: "a" },
+      { q: "A soma de 2/6 + 1/3 é:", a: "1/2", b: "2/3", c: "1/4", d: "3/4", correct: "a" },
+      { q: "Qual é o inverso de 5/2?", a: "2/5", b: "1/5", c: "5/1", d: "1/2", correct: "a" },
+
+      // GEOMETRIA
+      { q: "Qual é a área de um quadrado com lado 8 cm?", a: "16 cm²", b: "32 cm²", c: "64 cm²", d: "80 cm²", correct: "c" },
+      { q: "O perímetro de um retângulo de lados 6 cm e 4 cm é:", a: "20 cm", b: "18 cm", c: "22 cm", d: "24 cm", correct: "a" },
+      { q: "A área de um triângulo de base 10 cm e altura 6 cm é:", a: "30 cm²", b: "60 cm²", c: "40 cm²", d: "25 cm²", correct: "a" },
+      { q: "O raio de um círculo é 7 cm. Sua área é aproximadamente (π = 3,14):", a: "154 cm²", b: "120 cm²", c: "140 cm²", d: "130 cm²", correct: "a" },
+      { q: "Quantos lados tem um decágono?", a: "8", b: "9", c: "10", d: "12", correct: "c" },
+      { q: "Um cubo tem aresta de 3 cm. Seu volume é:", a: "9 cm³", b: "18 cm³", c: "27 cm³", d: "30 cm³", correct: "c" },
+      { q: "A soma dos ângulos internos de um triângulo é:", a: "90°", b: "120°", c: "180°", d: "360°", correct: "c" },
+      { q: "O volume de um paralelepípedo 2×3×4 é:", a: "20", b: "24", c: "30", d: "18", correct: "b" },
+      { q: "O perímetro de um círculo de raio 10 (π=3,14) é:", a: "31,4", b: "62,8", c: "50", d: "40", correct: "b" },
+      { q: "Quantos graus tem cada ângulo de um quadrado?", a: "45°", b: "60°", c: "90°", d: "120°", correct: "c" },
+
+      // ÁLGEBRA E EQUAÇÕES
+      { q: "Resolva: 2x + 6 = 14", a: "x = 4", b: "x = 5", c: "x = 3", d: "x = 6", correct: "a" },
+      { q: "Em 3x = 21, qual é o valor de x?", a: "5", b: "6", c: "7", d: "8", correct: "c" },
+      { q: "Se x = 4, qual é o valor de 2x² + 1?", a: "33", b: "35", c: "32", d: "30", correct: "a" },
+      { q: "Qual é a raiz da equação x² = 49?", a: "6", b: "7", c: "8", d: "9", correct: "b" },
+      { q: "Se 5x = 60, x =", a: "10", b: "12", c: "15", d: "20", correct: "b" },
+      { q: "A expressão 3(x + 4) equivale a:", a: "3x + 4", b: "3x + 12", c: "3x + 7", d: "x + 7", correct: "b" },
+      { q: "Se x + 5 = 9, x =", a: "2", b: "3", c: "4", d: "5", correct: "c" },
+      { q: "Resolva: 6x – 4 = 14", a: "x = 2", b: "x = 3", c: "x = 4", d: "x = 5", correct: "c" },
+      { q: "Qual é o valor de x se 10x = 2x + 40?", a: "3", b: "4", c: "5", d: "6", correct: "c" },
+      { q: "Em 2x – 5 = 9, x =", a: "7", b: "6", c: "8", d: "9", correct: "a" },
+
+      // REGRA DE TRÊS E PROPORÇÃO
+      { q: "Se 4 laranjas custam R$ 8,00, quanto custam 10 laranjas?", a: "R$18,00", b: "R$20,00", c: "R$16,00", d: "R$15,00", correct: "b" },
+      { q: "3 operários fazem uma tarefa em 12 dias. Quantos dias levarão 6 operários?", a: "3", b: "4", c: "6", d: "8", correct: "c" },
+      { q: "Se 5 metros custam R$25, quanto custam 8 metros?", a: "R$35", b: "R$40", c: "R$45", d: "R$30", correct: "b" },
+      { q: "Um carro percorre 240 km com 20 L. Qual é o consumo em km/L?", a: "10", b: "12", c: "15", d: "20", correct: "b" },
+      { q: "Se 12 lápis custam R$24, quanto custam 5 lápis?", a: "R$9", b: "R$10", c: "R$12", d: "R$8", correct: "b" },
+]
+  },
+
+ "portugues": {
+    icon: "mdi-book-open-page-variant",
+    title: "Português",
+    questions: [
+      // ORTOGRAFIA E ACENTUAÇÃO
+      { q: "Qual palavra está escrita incorretamente?", a: "Exceção", b: "Concessão", c: "Secessão", d: "Excessão", correct: "d" },
+      { q: "Qual é a forma correta?", a: "Beneficiente", b: "Beneficente", c: "Beneficiento", d: "Benificente", correct: "b" },
+      { q: "A palavra 'pôde' com acento indica:", a: "Presente", b: "Passado", c: "Futuro", d: "Imperativo", correct: "b" },
+      { q: "Assinale a opção com todas as palavras acentuadas corretamente.", a: "Vôo, idéia, heróico", b: "Voo, ideia, heroico", c: "Voo, idéa, heróico", d: "Vôo, idéa, heróico", correct: "b" },
+      { q: "Qual palavra tem o mesmo som do 's' em 'casa'?", a: "Prazer", b: "Sopro", c: "Exame", d: "Rosa", correct: "a" },
+      { q: "Qual dessas palavras está errada conforme o novo acordo ortográfico?", a: "Micro-ondas", b: "Autoescola", c: "Antiético", d: "Co-herdeiro", correct: "d" },
+      { q: "A forma correta é:", a: "Perceptível", b: "Perseptível", c: "Percebtível", d: "Perseptívil", correct: "a" },
+      { q: "A palavra 'raiz' possui quantas sílabas?", a: "1", b: "2", c: "3", d: "4", correct: "b" },
+      { q: "A palavra 'também' é:", a: "Monossílaba", b: "Dissílaba", c: "Trissílaba", d: "Polissílaba", correct: "b" },
+      { q: "Qual é o plural de 'cidadão'?", a: "Cidadões", b: "Cidadãos", c: "Cidadães", d: "Cidões", correct: "b" },
+      { q: "A palavra 'fácil' recebe acento porque:", a: "É oxítona terminada em l", b: "É paroxítona terminada em l", c: "É proparoxítona", d: "É oxítona terminada em i", correct: "b" },
+      { q: "Qual é a forma correta do plural de 'pão'?", a: "Pões", b: "Pães", c: "Paons", d: "Pãos", correct: "b" },
+      { q: "Qual palavra está grafada incorretamente?", a: "Presságio", b: "Exceção", c: "Essessial", d: "Censura", correct: "c" },
+      { q: "A forma plural de 'mal' é:", a: "Maus", b: "Males", c: "Mauses", d: "Mausis", correct: "b" },
+      { q: "Qual é o feminino de 'ator'?", a: "Atora", b: "Atatriz", c: "Atra", d: "Atriz", correct: "d" },
+      { q: "A palavra 'história' é acentuada por ser:", a: "Oxítona", b: "Proparoxítona", c: "Paroxítona", d: "Monossílaba", correct: "b" },
+      { q: "A forma correta é:", a: "Reivindicar", b: "Reividicar", c: "Reivindicar", d: "Revindicar", correct: "a" },
+      { q: "O plural de 'lápis' é:", a: "Lápises", b: "Lápis", c: "Lápiseses", d: "Lápis's", correct: "b" },
+      { q: "A palavra 'fugiu' é:", a: "Verbo", b: "Substantivo", c: "Advérbio", d: "Adjetivo", correct: "a" },
+      { q: "A palavra 'caixa-d'água' é um exemplo de:", a: "Hífen obrigatório", b: "Hífen proibido", c: "Contração", d: "Aglutinação", correct: "a" },
+
+      // GRAMÁTICA — CLASSES DE PALAVRAS
+      { q: "Na frase 'Ele corre rápido', a palavra 'rápido' é:", a: "Verbo", b: "Advérbio", c: "Adjetivo", d: "Substantivo", correct: "b" },
+      { q: "Qual é o plural de 'pão-duro'?", a: "Pães-duros", b: "Pão-duros", c: "Pães-duro", d: "Pães-duros", correct: "a" },
+      { q: "Na frase 'A menina feliz sorriu', 'feliz' é:", a: "Substantivo", b: "Adjetivo", c: "Verbo", d: "Pronome", correct: "b" },
+      { q: "Na frase 'Eu mesmo fiz o trabalho', 'mesmo' é:", a: "Pronome", b: "Advérbio", c: "Adjetivo", d: "Substantivo", correct: "a" },
+      { q: "O verbo 'poder' no pretérito perfeito do indicativo é:", a: "Pode", b: "Podia", c: "Pôde", d: "Poderia", correct: "c" },
+      { q: "Em 'Eles se abraçaram', o pronome 'se' indica:", a: "Reflexividade", b: "Reciprocidade", c: "Passividade", d: "Ênfase", correct: "b" },
+      { q: "A palavra 'ninguém' é:", a: "Pronome indefinido", b: "Pronome relativo", c: "Advérbio", d: "Conjunção", correct: "a" },
+      { q: "A palavra 'porque' é usada para:", a: "Pergunta", b: "Explicação", c: "Dúvida", d: "Conclusão", correct: "b" },
+      { q: "Em 'Quero que você venha', o termo 'que' é:", a: "Pronome relativo", b: "Conjunção subordinativa", c: "Interjeição", d: "Advérbio", correct: "b" },
+      { q: "A palavra 'embora' pode ser:", a: "Conjunção e advérbio", b: "Pronome e interjeição", c: "Substantivo e adjetivo", d: "Verbo e adjetivo", correct: "a" },
+      { q: "O termo 'muito' é advérbio quando:", a: "Acompanha verbo, adjetivo ou advérbio", b: "Acompanha substantivo", c: "Está no plural", d: "Indica intensidade nominal", correct: "a" },
+      { q: "A palavra 'felizmente' é um:", a: "Substantivo", b: "Adjetivo", c: "Advérbio", d: "Verbo", correct: "c" },
+      { q: "Em 'A casa é grande', o verbo 'é' indica:", a: "Ação", b: "Estado", c: "Desejo", d: "Mudança", correct: "b" },
+      { q: "O coletivo de 'abelha' é:", a: "Colmeia", b: "Enxame", c: "Favo", d: "Rebanho", correct: "b" },
+      { q: "O aumentativo de 'menino' é:", a: "Meninote", b: "Meninão", c: "Meninote", d: "Meninotezão", correct: "b" },
+      { q: "A palavra 'Brasil' é:", a: "Substantivo comum", b: "Substantivo próprio", c: "Adjetivo pátrio", d: "Verbo", correct: "b" },
+      { q: "A forma verbal de 'nós ir' está correta em:", a: "Nós iremos", b: "Nós vai", c: "Nós fomos ir", d: "Nós vai ir", correct: "a" },
+      { q: "A palavra 'depressa' é:", a: "Adjetivo", b: "Advérbio", c: "Substantivo", d: "Conjunção", correct: "b" },
+      { q: "A palavra 'cão' pertence à classe dos:", a: "Verbos", b: "Substantivos", c: "Adjetivos", d: "Advérbios", correct: "b" },
+      { q: "A forma 'trouxeram' é o verbo 'trazer' no tempo:", a: "Presente", b: "Futuro", c: "Pretérito perfeito", d: "Imperativo", correct: "c" },
+]
+  }
+};
+
 
         const elements = {
             categorySelection: document.getElementById('category-selection'),
