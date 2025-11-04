@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- Color theme for statusbar (Android only) -->
+    <meta name="theme-color" content="#2196f3">
+    <!-- Your app title -->
+    <title>Brain Boost</title>
+    <!-- Path to Framework7 Library Bundle CSS -->
+    <link rel="stylesheet" href="lib/framework7-bundle.min.css">
+    <!-- CSS PERSONALIZADO PARA MENU-->
+    <link rel="stylesheet" href="css/personalizado.css">
+    <!--Ícones Material Design-->
+    <link rel="stylesheet" href="css/materialdesignicons.min.css">
+</head>
+
+<body>
+    <!-- App root element -->
+    <div id="app">
+
+        <!-- Your main view, should have "view-main" class -->
+        <div class="view view-main">
+            <!-- Initial Page -->
+            <div data-name="link3" class="page">
+
+                <!-- Top Navbar -->
+                <div class="navbar">
+                    <div class="navbar-bg"></div>
+                    <div class="navbar-inner justify-content-center">
+                    </div>
+                </div>
+
+                <!-- Scrollable page content -->
+                <di class="page-content-game">
+                    <h1 class="quiz-title">QUIZ</h1>
+
+                    <div class="materias-box">
+                        <a href="/link8/" class="materia link">
+                            <i class="mdi mdi-math-compass"></i>
+                            <span>Matemática</span>
+                        </a>
+                        <a href="/quiz-portugues/" class="materia link">
+                            <i class="mdi mdi-book-open-variant"></i>
+                            <span>Português</span>
+                        </a>
+                        <a href="/quiz-ciencias/" class="materia link">
+                            <i class="mdi mdi-atom"></i>
+                            <span>Ciências Gerais</span>
+                        </a>
+                        <a href="/quiz-historia/" class="materia link">
+                            <i class="mdi mdi-book"></i>
+                            <span>História</span>
+                        </a>
+                        <a href="/quiz-geografia/" class="materia link">
+                            <i class="mdi mdi-earth"></i>
+                            <span>Geografia</span>
+                        </a>
+                        <a href="/quiz-filosofia/" class="materia link">
+                            <i class="mdi mdi-head-lightbulb"></i>
+                            <span>Filosofia</span>
+                        </a>
+                        <a href="/quiz-sociologia/" class="materia link">
+                            <i class="mdi mdi-account-group"></i>
+                            <span>Sociologia</span>
+                        </a>
+                        <a href="/quiz-todas/" class="materia link">
+                            <i class="mdi mdi-lightbulb-group"></i>
+                            <span>Todas Matérias</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Path to Framework7 Library Bundle JS-->
+    <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
+    <!-- jQuery -->
+    <script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>
+    <!-- Roteamento do app-->
+    <script type="text/javascript" src="js/routes.js"></script>
+    <script src="cordova.js"></script>
+</body>
+
+</html>

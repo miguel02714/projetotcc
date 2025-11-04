@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Boost - Criar Perfil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos Globais e Fundo */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+            background-color: #001f54; /* Fundo azul escuro da imagem */
+            color: white;
+            box-sizing: border-box;
+        }
+
+        /* Container Principal */
+        .container {
+            width: 100%;
+            max-width: 400px; /* Limite para simular a visualização mobile */
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        /* Topo e Título */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            flex-grow: 1; /* Permite que o título ocupe o espaço central */
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            margin: 0;
+        }
+
+        .back-arrow {
+            font-size: 1.5em;
+            color: white;
+            cursor: pointer;
+            padding-right: 20px; /* Adiciona espaço para não colar no título */
+        }
+        
+        /* Seção do Avatar */
+        .avatar-section {
+            margin-bottom: 30px;
+        }
+
+        .avatar-circle {
+            width: 100px;
+            height: 100px;
+            background-color: #17427D; /* Azul escuro ligeiramente mais claro que o fundo */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .avatar-circle i {
+            font-size: 4em;
+            color: white;
+        }
+
+        /* Formulário */
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1em;
+            color: white; /* Cor branca para o texto do label (Nome, E-mail, Senha) */
+        }
+        
+        /* Inputs */
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            color: #333; /* Cor do texto digitado */
+            box-sizing: border-box;
+        }
+
+        /* Botão Criar */
+        .action-button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+            background-color: #236B8E; /* Azul-petróleo/aço escuro para o botão */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.2s;
+        }
+
+        .action-button:hover {
+            background-color: #1a5c78;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="header">
+            <i class="fas fa-arrow-left back-arrow"></i>
+            <h1>Crie seu perfil</h1>
+            <div style="width: 1.5em; margin-left: auto;"></div> 
+        </div>
+
+        <div class="avatar-section">
+            <div class="avatar-circle">
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </div>
+
+        <form action="/registro" method="post">
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" placeholder="">
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" placeholder="">
+            </div>
+
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" placeholder="">
+            </div>
+
+            <button type="submit" class="action-button">
+                Criar
+            </button>
+        </form>
+    </div>
+
+</body>
+</html>

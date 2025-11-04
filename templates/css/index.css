@@ -1,0 +1,510 @@
+a {
+  color: black
+}
+
+.toolbar{
+    height: 60px;
+    background: #0F172B;
+}
+
+.tab-link{
+    display: flex;
+    justify-content: center;
+    flex-flow: column wrap;
+}
+
+.btn-voltar {
+    font-size: large;
+}
+
+.toolbar-inner{
+    background: black;
+    border-radius: 50px;
+}
+
+.toolbar-inner .link{    
+    flex:1;
+    height: 10px;  
+    line-height: 25px; 
+	font-weight:bold;    
+    color: #0095FF;
+}
+
+.toolbar-inner .link:not(.active){
+    color: #0095FF;
+	font-weight:normal;
+}
+
+.toolbar-inner > .link i{
+    font-size: 28px;
+}
+
+body{
+    background-color: #0F172B   ;
+}
+
+div{
+    background-color: #0F172B;
+}
+
+.top-nav{
+    width: 100%;
+    height: 180px;
+    align-items: center;
+    display: flex;
+    justify-content:space-between;
+}
+
+.logo-app{
+    position: absolute; /* Remove do fluxo normal */
+    left: 50%; /* Posiciona no meio */
+    transform: translateX(-50%); /* Ajusta precisão do centro */
+    width: 143px;
+    height: auto;
+    margin-top: 30px;
+}
+  
+.btn-perfil{
+    margin-left: auto; /* Empurra para a direita */
+    margin-bottom: auto;
+    color: rgba(29, 84, 123, 1);
+    font-size: 40px;
+}
+
+.dias-seguidos{
+    height: 108px;
+    background: black;
+    border-radius: 30px;
+    width: 480px;
+    margin: 0 auto;
+}
+
+.streak-container {
+    background-color: white;
+    padding: 16px;
+    border-radius: 16px;
+    text-align: left;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    width: fit-content;
+    margin: auto;
+    margin-top: 30px;
+    height: 80px;
+}
+  
+.streak-dias {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    background-color: white;
+}
+  
+.dia {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #d3d3d3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+  
+.dia.ativo {
+    background-color: #1f4c6b;
+    color: white;
+}
+  
+.div-pai{
+    padding: 30px;
+}
+
+
+.card-chat {
+  background-color: #FFB921;
+  border-radius: 30px;
+  height: 60px;
+  width: 80%;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  padding: 10px 30px; 
+  gap: 15px; 
+}
+
+.card-chat .icon-msg {
+  background-color: #FFB921;
+  font-size: 30px;
+  flex-shrink: 0;
+}
+
+.card-chat .txt-msg {
+  line-height: 1.2;
+  margin: 0;
+  padding: 0;
+  background-color: #FFB921;
+
+}
+
+.card-chat .txt-msg p {
+  margin-bottom: 5px;
+  margin-top: 0;
+}
+
+
+.card-agenda {
+  background-color: #1D547B;
+  border-radius: 30px;
+  height: 60px;
+  width: 80%;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  padding: 10px 30px; 
+  gap: 15px; 
+}
+
+.card-agenda .icon-agenda {
+    font-size: 30px;
+    background-color: #1D547B;
+    color: white;
+}
+
+.card-agenda .card-agenda-text {
+    background-color: #1D547B;
+    color: white;
+}
+
+.card-agenda .card-agenda-text b{
+    color: white;
+}
+
+.card-agenda .card-agenda-text p{
+      margin-bottom: 5px;
+      margin-top: 0;
+}
+
+.card-relaxamento {
+  background-color: #2BAA5C;
+  border-radius: 30px;
+  height: 60px;
+  width: 80%;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  padding: 10px 30px; 
+  gap: 15px; 
+  overflow: hidden;
+}
+
+.card-relaxamento .icon-relaxamento {
+    font-size: 30px;
+    background-color: #2BAA5C;
+}
+
+.card-relaxamento .card-relaxamento-text{
+    background-color: #2BAA5C;
+}
+
+.card-relaxamento .card-relaxamento-text p{
+    margin-bottom: 5px;
+    margin-top: 0;
+}
+
+.card-relaxamento .card-relaxamento-text b{
+    background-color: #2BAA5C;
+    margin-bottom: 0px;
+}
+
+
+/*css da meditação*/
+
+        
+.top-nav {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+
+        /* Estilo do conteúdo da página */
+.conteudo-meditacao {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+.meditacao-header {
+    margin-top: 20px;
+}
+
+.meditacao-titulo {
+    font-size: 28px;
+    color: #fff;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+}
+
+.meditacao-subtitulo {
+    font-size: 16px;
+    color: #fff;
+    opacity: 0.8;
+    margin: 5px 0 0 0;
+    padding: 0;
+}
+
+/* MODIFICAÇÕES - INÍCIO */
+
+/* Container que alinha o timer, o botão e o relógio */
+.timer-e-relogio {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    width: 100%;
+    margin-top: 380px; /* Esta regra empurra o container para o final da página */
+}
+/* Estilo do timer */
+.timer {
+    margin-right: 170px;
+    text-align: left;
+    margin-bottom: 5px; /* Espaço abaixo do timer */
+}
+
+.timer-display {
+    font-size: 40px;
+    color: #fff;
+    font-weight: 700;
+    margin: 0; /* Remove a margem padrão para evitar conflitos */
+}
+
+/* Container para alinhar o botão e o relógio lado a lado */
+.botoes-alinhados {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Container do botão de meditação */
+.botao-medit {
+    margin-right: 80px; /* Espaço à direita do botão */
+}
+
+/* Estilo do botão de meditação */
+.btn-meditacao {
+    display: block; /* Para que o padding e margem funcionem corretamente */
+    background-color: #fff;
+    color: #333;
+    text-decoration: none;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Container do relógio */
+.relogio-container {
+    margin-left: 20px; /* Espaço à esquerda do relógio */
+}
+
+
+
+.relogio-container .relogio-icone {
+    width: 70px;
+    height: 70px;
+
+}
+
+
+
+/* css da pagina de escolher o quiz */
+
+
+.page-content-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #0F172B; /* fundo geral */
+  min-height: 100vh;
+  padding: 20px 10px;
+  box-sizing: border-box;
+}
+
+.quiz-title {
+  font-size: 2.4rem;
+  font-weight: 900;
+  text-align: center;
+  color: #fff;
+  margin: 20px 0 25px;
+  margin-top: 50px;
+}
+
+.materias-box {
+  background: #214562; /* caixona arredondada */
+  padding: 25px 15px;
+  border-radius: 35px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+}
+
+.materia {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    gap: 8px;
+    cursor: pointer;
+    transition: transform .2s ease;
+    text-decoration: none;
+    background: #1c355c;   /* fundo individual */
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.materia:hover {
+  transform: scale(1.07);
+  color: #0095FF;
+}
+
+.materia i {
+  font-size: 54px; /* tamanho do ícone */
+  line-height: 1;
+}
+
+.materia span {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 480px) {
+  .materias-box {
+    gap: 20px;
+    padding: 20px 10px;
+  }
+  .materia i {
+    font-size: 44px;
+  }
+}
+
+.btn-perfil-game {
+    margin-left: 50px;
+    color: #fff;
+    font-size: 60px;
+}
+
+/* css do quiz de matematica */
+
+/* ===== ESTILO QUIZ ===== */
+.quiz-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 12px;
+  background: #0F172B;
+  min-height: 100%;
+  color: #fff;
+}
+
+/* título centralizado e chamativo */
+.navbar .title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+/* subtítulo (ex: Matemática 📐) */
+.quiz-subtitle {
+  font-size: 0.9rem;
+  color: #cfd8e3;
+  font-style: italic;
+}
+
+/* container do quiz */
+#quiz-container {
+  background: #0F172B;
+  border-radius: 20px;
+  padding-top: 20px;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+
+/* pergunta */
+.quiz-question {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+/* opções */
+.quiz-options .quiz-option {
+  background: #1e3a6d;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.quiz-options .quiz-option:hover {
+  background: #2751a3;
+  transform: scale(1.03);
+}
+
+/* quando selecionada */
+.quiz-options .quiz-option.selected {
+  background: #3273dc;
+}
+
+/* botão verificar resposta */
+#check-answer {
+  background: #2751a3;
+  color: #fff;
+  border-radius: 18px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+#check-answer:hover {
+  background: #3273dc;
+}
+
+/* resultado */
+#result-container {
+  color: #fff;
+}
+
+#restart-btn {
+  margin-top: 10px;
+  border-radius: 14px;
+  padding: 10px 20px;
+  color: #fff;
+  border: 2px solid #3273dc;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+#restart-btn:hover {
+  background: #3273dc;
+}

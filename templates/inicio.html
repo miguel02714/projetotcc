@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Boost - Login</title>
+    <style>
+        /* Estilos Globais e Fundo */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Arial', sans-serif; /* Fonte padrão */
+            color: white;
+            overflow: hidden; /* Evita barras de rolagem desnecessárias */
+        }
+
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('img/fundo.png'); /* Imagem de fundo fornecida anteriormente */
+            background-size: cover;
+            background-position: center;
+            /* Aplicado o filtro diretamente aqui para escurecer e desfocar o fundo */
+
+            z-index: -1; /* Mantém o fundo atrás de todo o conteúdo */
+        }
+
+        /* Container Principal */
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Empurra o conteúdo para cima e os botões para baixo */
+            align-items: center;
+            height: 100%;
+            padding: 50px 20px; /* Padding vertical para espaço */
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        /* Seção de Título/Texto */
+        .header-text {
+            flex-grow: 1; /* Permite que o texto ocupe o espaço restante */
+            max-width: 300px;
+            /* Ajustado o padding-top para alinhar mais ao topo, como na imagem */
+            padding-top: 15vh; 
+        }
+
+        .header-text h1 {
+            font-size: 2em;
+            font-weight: bold;
+            line-height: 1.3;
+            margin: 0;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); /* Sombra para destacar */
+        }
+
+        /* Seção do Ícone (Avatar) */
+        .avatar-section {
+            /* Removido o margin-bottom para a imagem ficar mais próxima dos botões */
+            /* Se for preciso mais espaço, podemos ajustar o padding-bottom do container */
+            margin-bottom: 20px; /* Mantive um pouco para não colar nos botões */
+        }
+        
+        .avatar-section img {
+            width: 150px; /* Tamanho do círculo azul */
+            height: 150px;
+            object-fit: contain; /* Garante que a imagem se ajuste sem cortar */
+        }
+        
+        /* Seção de Ações (Botões) */
+        .action-buttons {
+            width: 100%;
+            max-width: 300px; /* Largura máxima dos botões */
+            padding-bottom: 10vh; /* Espaço na parte inferior, como no celular */
+        }
+
+        .action-buttons button {
+            width: 100%;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333; /* Cor do texto do botão */
+            background-color: white;
+            border: none;
+            border-radius: 8px; /* Cantos arredondados */
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .action-buttons button:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-container"></div>
+
+    <div class="container">
+        <div class="header-text">
+            <h1>
+                Estude melhor, aprenda mais. Seu sucesso começa aqui!
+            </h1>
+        </div>
+
+        <div class="avatar-section">
+            <img src="img/logo.png" alt="Logo Brain Boost">
+        </div>
+
+        <div class="action-buttons">
+            <form action="/loginentrar" method="get">
+            <button>
+                Login
+            </button>
+            </form>
+            <form action="/registroentrar" method="get">
+            <button>
+                Cadastre-se
+            </button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

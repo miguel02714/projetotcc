@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Boost - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos Globais e Fundo */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+            background-color: #001f54; /* Fundo azul escuro consistente */
+            color: white;
+            box-sizing: border-box;
+        }
+
+        /* Container Principal */
+        .container {
+            width: 100%;
+            max-width: 400px; /* Limite para simular a visualização mobile */
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Topo e Título */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            flex-grow: 1; 
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            margin: 0;
+            /* Garante que o título não sobreponha a seta quando está centralizado */
+            padding-left: 20px; 
+        }
+
+        .back-arrow {
+            font-size: 1.5em;
+            color: white;
+            cursor: pointer;
+            position: absolute; /* Posiciona a seta de forma absoluta para centralizar o H1 */
+            left: 20px;
+            top: 25px;
+        }
+        
+        /* Seção do Avatar (simulando a bolha azul com ícone) */
+        .avatar-section {
+            text-align: center;
+            margin-top: 50px; /* Espaçamento do topo */
+            margin-bottom: 50px;
+        }
+
+        .avatar-circle {
+            width: 100px;
+            height: 100px;
+            background-color: #17427D; /* Azul escuro ligeiramente mais claro */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .avatar-circle i {
+            font-size: 4em;
+            color: white;
+        }
+
+        /* Formulário */
+        .form-content {
+            flex-grow: 1;
+            padding-top: 20px;
+        }
+        
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1em;
+            color: white;
+        }
+        
+        /* Inputs */
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        /* Links de Ajuda */
+        .help-link {
+            text-align: right;
+            margin-top: -10px; /* Puxa para perto do campo de senha */
+            margin-bottom: 40px;
+        }
+
+        .help-link a {
+            color: #ccc; /* Cor cinza clara para o link */
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .help-link a:hover {
+            color: white;
+        }
+
+        /* Botão Login */
+        .action-button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+            background-color: #236B8E; /* Azul-petróleo/aço escuro consistente */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .action-button:hover {
+            background-color: #1a5c78;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="header">
+            <i class="fas fa-arrow-left back-arrow"></i>
+            <h1>Login</h1>
+        </div>
+
+        <div class="avatar-section">
+            <div class="avatar-circle">
+                <i class="fas fa-lock"></i> 
+            </div>
+        </div>
+
+        <div class="form-content">
+            <form>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="Digite seu e-mail">
+                </div>
+
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" name="senha" placeholder="Digite sua senha">
+                </div>
+                
+                <div class="help-link">
+                    <a href="#">Esqueceu a senha?</a>
+                </div>
+
+                <button type="submit" class="action-button">
+                    Login
+                </button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
