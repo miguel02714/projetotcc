@@ -29,7 +29,20 @@ app.config['SQLALCHEMY_DATABASE_URI'] = db_url or ('sqlite:///' + os.path.join(b
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=5)
+app.config.update(
+    SECRET_KEY=os.environ.get('SECRET_KEY', 'chave_super_segura_brain_2025'),
+    SESSION_COOKIE_NAME='brain_session',
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='None',   # precisa ser None p/ cross-site
+    SESSION_COOKIE_SECURE=True,       # precisa de HTTPS
+    PERMANENT_SESSION_LIFETIME=timedelta(days=30),
 
+    # se usar "lembrar-me" do Flask-Login
+    REMEMBER_COOKIE_DURATION=timedelta(days=30),
+    REMEMBER_COOKIE_HTTPONLY=True,
+    REMEMBER_COOKIE_SAMESITE='None',
+    REMEMBER_COOKIE_SECURE=True,
+)
 db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
@@ -437,3 +450,4 @@ if __name__ == '__main__':
         db.create_all()
     # debug=True só em dev
     app.run(debug=True)
+
