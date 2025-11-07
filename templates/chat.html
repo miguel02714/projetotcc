@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ title }}</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+
+<style>
+:root {
+    --bg: #07111C;
+    --card: #0C1826;
+    --card-2: #102232;
+    --accent: #3EB6FF;
+    --text: #ffffff;
+    --muted: #9bb3c9;
+    --radius: 18px;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+.chat-header {
+    padding: 14px 18px;
+    background: var(--card);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.chat-header a {
+    color: var(--muted);
+    font-size: 24px;
+    text-decoration: none;
+}
+.chat-header a:hover { color: var(--accent); }
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.name { font-size: 17px; font-weight: 600; }
+
+/* MENSAGENS */
+.messages-display {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px;
+}
+
+.msg { display: flex; margin-bottom: 14px; }
+.bubble {
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    max-width: 75%;
+    font-size: 15px;
+    line-height: 1.35;
+}
+
+.sent { justify-content: flex-end; }
+.sent .bubble {
+    background: var(--accent);
+    color: #000;
+    border-bottom-right-radius: 4px;
+}
+
+.received { justify-content: flex-start; }
+.received .bubble {
+    background: var(--card-2);
+    color: var(--text);
+    border-bottom-left-radius: 4px;
+}
+
+.no-messages {
+    text-align: center;
+    color: var(--muted);
+    padding-top: 50px;
+}
+
+/* INPUT */
+.input-area {
+    background: var(--card);
+    padding: 12px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    gap: 10px;
+
+    /* LEVANTA O CHAT DO RODAPÉ */
+    margin-bottom: 70px; /* Altura da navbar */
+
+    /* EVITA O BUG DO TECLADO NO CELULAR */
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}
+
+.input-area input {
+    flex: 1;
+    background: #122335;
+    border: none;
+    padding: 12px;
+    color: var(--text);
+    border-radius: var(--radius);
+    outline: none;
+}
+.input-area button {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 0 18px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+}
+.input-area button:hover { background: #5EC9FF; }
+
+/* NAVBAR IGUAL AO SEU PADRÃO */
+.toolbar-bottom {
+    position: fixed;
+    bottom: 0; left: 0;
+    width: 100%;
+    background: var(--card);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 8px 0;
+}
+
+.toolbar-inner {
+    display: flex;
+    justify-content: space-around;
+}
+
+.toolbar-link {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: 0.2s;
+}
+
+.toolbar-link i { font-size: 24px; }
+.toolbar-link.active,
+.toolbar-link:hover { color: var(--accent); }
+</style>
+</head>
+
+<body>
+
+<div class="chat-header">
+    <a href="{{ url_for('chattodos') }}"><i class="ri-arrow-left-line"></i></a>
+
+    <div class="profile-info">
+        <i class="ri-user-3-fill"></i>
+        <div>
+            <div class="name">{{ outro_usuario.nome }}</div>
+            <small style="color:var(--muted);">{{ outro_usuario.email }}</small>
+        </div>
+    </div>
+</div>
+
+<div class="messages-display" id="msg-box">
+    {% if mensagens %}
+        {% for msg in mensagens %}
+            {% if msg.id_remetente == current_user.id_usuario %}
+            <div class="msg sent"><div class="bubble">{{ msg.texto }}</div></div>
+            {% else %}
+            <div class="msg received"><div class="bubble">{{ msg.texto }}</div></div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p class="no-messages">Comece a sua conversa com {{ outro_usuario.nome }}!</p>
+    {% endif %}
+</div>
+
+<form method="POST" class="input-area">
+    <input type="text" name="mensagem" placeholder="Digite sua mensagem..." autocomplete="off" required>
+    <button type="submit">Enviar</button>
+</form>
+
+<div class="toolbar-bottom">
+    <nav class="toolbar-inner display-flex">
+
+    <a href="{{ url_for('inicio') }}" class="toolbar-link active-home" aria-label="Início">
+        <i class="ri-home-5-fill"></i> 
+        <span>Home</span>
+    </a>
+
+    <a href="{{ url_for('chattodos') }}" class="toolbar-link active-chat" aria-label="Chat">
+        <i class="ri-chat-3-fill"></i> 
+        <span>Chat</span>
+    </a>
+
+    <a href="{{ url_for('quizboost') }}" class="toolbar-link" aria-label="Jogos">
+        <i class="ri-gamepad-fill"></i>
+        <span>Jogos</span>
+    </a>
+
+    <a href="{{ url_for('calendario') }}" class="toolbar-link" aria-label="Agenda">
+        <i class="ri-calendar-todo-fill"></i>
+        <span>Agenda</span>
+    </a>
+    
+    <a href="{{ url_for('relaxar') }}" class="toolbar-link" aria-label="Relaxar">
+        <i class="ri-timer-2-fill"></i>
+        <span>Relaxar</span>
+    </a>
+
+</nav>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const box = document.getElementById("msg-box");
+    box.scrollTop = box.scrollHeight;
+});
+</script>
+
+</body>
+</html>

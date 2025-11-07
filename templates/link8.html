@@ -394,27 +394,34 @@
         </div>
         
        <div class="toolbar toolbar-bottom">
-            <nav class="toolbar-inner display-flex">
+    <nav class="toolbar-inner display-flex">
 
-                <a href="{{ url_for('inicio') }}" class="toolbar-link" aria-label="Início">
-                    <i class="ri-home-5-fill"></i> <span>Home</span>
-                </a>
+    <a href="{{ url_for('inicio') }}" class="toolbar-link active-home" aria-label="Início">
+        <i class="ri-home-5-fill"></i> 
+        <span>Home</span>
+    </a>
 
-                <a href="{{ url_for('quizboost') }}" id="toolbar-quiz-link" class="toolbar-link" aria-label="Jogos">
-                    <i class="ri-gamepad-fill"></i>
-                    <span>Jogos</span>
-                </a>
+    <a href="{{ url_for('chattodos') }}" class="toolbar-link active-chat" aria-label="Chat">
+        <i class="ri-chat-3-fill"></i> 
+        <span>Chat</span>
+    </a>
 
-                <a href="{{ url_for('calendario') }}" class="toolbar-link" aria-label="Agenda">
-                    <i class="ri-calendar-todo-fill"></i>
-                    <span>Agenda</span>
-                </a>
-                
-                <a href="{{ url_for('relaxar') }}" class="toolbar-link" aria-label="Relaxar">
-                    <i class="ri-timer-2-fill"></i>
-                    <span>Relaxar</span>
-                </a>
-            </nav>
+    <a href="{{ url_for('quizboost') }}" class="toolbar-link" aria-label="Jogos">
+        <i class="ri-gamepad-fill"></i>
+        <span>Jogos</span>
+    </a>
+
+    <a href="{{ url_for('calendario') }}" class="toolbar-link" aria-label="Agenda">
+        <i class="ri-calendar-todo-fill"></i>
+        <span>Agenda</span>
+    </a>
+    
+    <a href="{{ url_for('relaxar') }}" class="toolbar-link" aria-label="Relaxar">
+        <i class="ri-timer-2-fill"></i>
+        <span>Relaxar</span>
+    </a>
+
+</nav>
         </div>
     </div>
 
