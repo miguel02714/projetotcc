@@ -1,7 +1,9 @@
 # app.py
 import os
+import logging
 import bcrypt
 from datetime import timedelta, datetime
+from urllib.parse import urlparse, urljoin
 
 from flask import (
     Flask, render_template, redirect, url_for, request, flash
@@ -11,44 +13,59 @@ from flask_login import (
     UserMixin, LoginManager, login_user, logout_user,
     current_user, login_required
 )
-from sqlalchemy import or_, and_
+from sqlalchemy import or_, and_, func
 from sqlalchemy.exc import IntegrityError
 
 # =========================================
-# CONFIG
+# APP & CONFIG
 # =========================================
 app = Flask(__name__)
+
+# Segurança e Sessão
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'chave_super_segura_brain_2025')
 
+# Banco de Dados
 basedir = os.path.abspath(os.path.dirname(__file__))
 db_url = os.environ.get('DATABASE_URL')
 # compatibilidade antiga do Heroku
 if db_url and db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
-app.config['SQLALCHEMY_DATABASE_URI'] = db_url or ('sqlite:///' + os.path.join(basedir, 'brain.db'))
 
+app.config['SQLALCHEMY_DATABASE_URI'] = db_url or ('sqlite:///' + os.path.join(basedir, 'brain.db'))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=5)
+
+# Cookies / Sessão
+# Em dev (sem HTTPS), você pode setar APP_SECURE_COOKIES=0 pra não quebrar cookie SameSite=None
+_secure_cookies_env = os.environ.get('APP_SECURE_COOKIES', '1').strip()
+SECURE_COOKIES = _secure_cookies_env not in ('0', 'false', 'False', 'no', 'NO')
+
 app.config.update(
-    SECRET_KEY=os.environ.get('SECRET_KEY', 'chave_super_segura_brain_2025'),
     SESSION_COOKIE_NAME='brain_session',
     SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE='None',   # precisa ser None p/ cross-site
-    SESSION_COOKIE_SECURE=True,       # precisa de HTTPS
+    SESSION_COOKIE_SAMESITE='None' if SECURE_COOKIES else 'Lax',
+    SESSION_COOKIE_SECURE=SECURE_COOKIES,
     PERMANENT_SESSION_LIFETIME=timedelta(days=30),
 
-    # se usar "lembrar-me" do Flask-Login
+    # Flask-Login "lembrar-me"
     REMEMBER_COOKIE_DURATION=timedelta(days=30),
     REMEMBER_COOKIE_HTTPONLY=True,
-    REMEMBER_COOKIE_SAMESITE='None',
-    REMEMBER_COOKIE_SECURE=True,
+    REMEMBER_COOKIE_SAMESITE='None' if SECURE_COOKIES else 'Lax',
+    REMEMBER_COOKIE_SECURE=SECURE_COOKIES,
 )
+
 db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'loginentrar'
 login_manager.login_message = 'Faça login para continuar.'
 login_manager.login_message_category = 'info'
+
+# Logging básico
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+)
+log = logging.getLogger(__name__)
 
 BCRYPT_ROUNDS = 12
 
@@ -60,7 +77,7 @@ class Usuario(db.Model, UserMixin):
     __tablename__ = 'usuario'
     id_usuario = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(120), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False, index=True)
     senha_hash = db.Column(db.String(200), nullable=False)
     turma = db.Column(db.String(50))
     dias_seguidos = db.Column(db.Integer, default=1)
@@ -86,21 +103,19 @@ class Usuario(db.Model, UserMixin):
 class Conversa(db.Model):
     __tablename__ = 'conversa'
     id_conversa = db.Column(db.Integer, primary_key=True)
-    usuario1_id = db.Column(db.Integer, db.ForeignKey('usuario.id_usuario'), nullable=False)
-    usuario2_id = db.Column(db.Integer, db.ForeignKey('usuario.id_usuario'), nullable=False)
-    ultima_atualizacao = db.Column(db.DateTime, default=datetime.utcnow)
-
-    # Não expomos relationships no template para evitar lazy-load fora da sessão
+    usuario1_id = db.Column(db.Integer, db.ForeignKey('usuario.id_usuario'), nullable=False, index=True)
+    usuario2_id = db.Column(db.Integer, db.ForeignKey('usuario.id_usuario'), nullable=False, index=True)
+    ultima_atualizacao = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 
 
 class Mensagem(db.Model):
     __tablename__ = 'mensagem'
     id_mensagem = db.Column(db.Integer, primary_key=True)
     texto = db.Column(db.Text, nullable=False)
-    data_envio = db.Column(db.DateTime, default=datetime.utcnow)
+    data_envio = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 
-    conversa_id = db.Column(db.Integer, db.ForeignKey('conversa.id_conversa'), nullable=False)
-    remetente_id = db.Column(db.Integer, db.ForeignKey('usuario.id_usuario'), nullable=False)
+    conversa_id = db.Column(db.Integer, db.ForeignKey('conversa.id_conversa'), nullable=False, index=True)
+    remetente_id = db.Column(db.Integer, db.ForeignKey('usuario.id_usuario'), nullable=False, index=True)
 
 
 @login_manager.user_loader
@@ -109,17 +124,19 @@ def load_user(user_id):
 
 
 # =========================================
-# HELPERS (evitar lazy-load no template)
+# HELPERS
 # =========================================
 def conversa_to_viewtuple(conversa: Conversa):
     """Retorna tupla (contato_dict, ultima_atualizacao) sem lazy-load."""
-    if conversa.usuario1_id == current_user.id_usuario:
-        contato = db.session.get(Usuario, conversa.usuario2_id)
-    else:
-        contato = db.session.get(Usuario, conversa.usuario1_id)
+    meu_id = getattr(current_user, 'id_usuario', None)
+    if meu_id is None:
+        # não logado; fallback defensivo
+        return ({"id_usuario": 0, "nome": "[usuário]", "turma": None, "email": ""}, conversa.ultima_atualizacao)
+
+    outro_id = conversa.usuario2_id if conversa.usuario1_id == meu_id else conversa.usuario1_id
+    contato = db.session.get(Usuario, outro_id)
     if not contato:
-        # contato deletado? escondemos sem quebrar a renderização
-        return ({"id_usuario": 0, "nome": "[usuário removido]", "turma": None}, conversa.ultima_atualizacao)
+        return ({"id_usuario": 0, "nome": "[usuário removido]", "turma": None, "email": ""}, conversa.ultima_atualizacao)
 
     return (
         {
@@ -141,6 +158,13 @@ def mensagem_to_viewdict(msg: Mensagem):
     }
 
 
+def is_safe_url(target):
+    # Evita open redirect no parâmetro "next"
+    host_url = urlparse(request.host_url)
+    redirect_url = urlparse(urljoin(request.host_url, target))
+    return redirect_url.scheme in ('http', 'https') and host_url.netloc == redirect_url.netloc
+
+
 # =========================================
 # ROTAS
 # =========================================
@@ -152,7 +176,7 @@ def inicio():
     dados_dinamicos = {
         'dias_seguidos': current_user.dias_seguidos or 0,
         'dia_atual_na_semana': datetime.utcnow().isoweekday() % 7 + 1,  # 1..7
-        'dias_proxima_prova': 7,  # placeholder; substitua pela sua lógica real
+        'dias_proxima_prova': 7,  # placeholder
         'minutos_relaxados_semana': current_user.minutos_relaxados or 0
     }
     return render_template('index.html', dados_dinamicos=dados_dinamicos, current_user=current_user, title="Brain Boost")
@@ -175,9 +199,9 @@ def loginentrar():
 
 @app.route('/registro', methods=['POST'])
 def registro():
-    nome = request.form.get('nome')
-    email = request.form.get('email')
-    senha = request.form.get('senha')
+    nome = (request.form.get('nome') or '').strip()
+    email = (request.form.get('email') or '').strip().lower()
+    senha = request.form.get('senha') or ''
 
     if not nome or not email or not senha:
         flash('Por favor, preencha todos os campos.', 'warning')
@@ -186,7 +210,7 @@ def registro():
         flash('A senha deve ter pelo menos 6 caracteres.', 'warning')
         return redirect(url_for('registroentrar'))
 
-    novo = Usuario(nome=nome.strip(), email=email.strip().lower())
+    novo = Usuario(nome=nome, email=email)
     novo.set_senha(senha)
 
     try:
@@ -201,8 +225,8 @@ def registro():
         return redirect(url_for('registroentrar'))
     except Exception as e:
         db.session.rollback()
+        log.exception("[REGISTRO] erro inesperado")
         flash('Erro ao registrar. Tente novamente.', 'danger')
-        print(f"[REGISTRO] {e}")
         return redirect(url_for('registroentrar'))
 
 
@@ -217,7 +241,9 @@ def login():
         login_user(usuario, remember=remember_me)
         flash(f'Olá, {usuario.nome}!', 'success')
         next_page = request.args.get('next')
-        return redirect(next_page or url_for('inicio'))
+        if next_page and is_safe_url(next_page):
+            return redirect(next_page)
+        return redirect(url_for('inicio'))
 
     flash('E-mail ou senha inválidos.', 'danger')
     return redirect(url_for('loginentrar'))
@@ -241,9 +267,9 @@ def perfil():
 @app.route('/perfil/editar', methods=['POST'])
 @login_required
 def editar_usuario():
-    novo_nome = request.form.get('nome') or ""
+    novo_nome = (request.form.get('nome') or "").strip()
     novo_email = (request.form.get('email') or "").strip().lower()
-    nova_turma = request.form.get('turma')
+    nova_turma = (request.form.get('turma') or "").strip()
     senha_atual = request.form.get('senha_atual') or ""
     nova_senha = request.form.get('nova_senha') or ""
     confirmar_senha = request.form.get('confirmar_senha') or ""
@@ -275,16 +301,16 @@ def editar_usuario():
 
     current_user.nome = novo_nome
     current_user.email = novo_email
-    current_user.turma = nova_turma
+    current_user.turma = nova_turma or None
 
     try:
         db.session.commit()
         if not nova_senha:
             flash('Perfil atualizado!', 'success')
-    except Exception as e:
+    except Exception:
         db.session.rollback()
+        log.exception("[PERFIL] erro ao salvar alterações")
         flash('Erro ao salvar alterações.', 'danger')
-        print(f"[PERFIL] {e}")
 
     return redirect(url_for('perfil'))
 
@@ -311,10 +337,10 @@ def relaxar():
         current_user.minutos_relaxados = (current_user.minutos_relaxados or 0) + 5
         db.session.commit()
         flash('Parabéns! Você relaxou por 5 minutos!', 'success')
-    except Exception as e:
+    except Exception:
         db.session.rollback()
+        log.exception("[RELAXAR] erro ao registrar relaxamento")
         flash('Não consegui registrar seu relaxamento agora.', 'warning')
-        print(f"[RELAXAR] {e}")
     return render_template("link6.html", title="Relaxar")
 
 
@@ -323,35 +349,40 @@ def relaxar():
 @login_required
 def chattodos():
     termo_busca = (request.args.get('busca') or "").strip()
+    termo_normalizado = termo_busca.lower()
 
     # Conversas do usuário
-    conversas = Conversa.query.filter(
-        or_(
-            Conversa.usuario1_id == current_user.id_usuario,
-            Conversa.usuario2_id == current_user.id_usuario
-        )
-    ).order_by(Conversa.ultima_atualizacao.desc()).all()
+    conversas = (Conversa.query
+                 .filter(or_(
+                     Conversa.usuario1_id == current_user.id_usuario,
+                     Conversa.usuario2_id == current_user.id_usuario
+                 ))
+                 .order_by(Conversa.ultima_atualizacao.desc())
+                 .all())
 
-    # Convertemos pra estruturas simples (= sem lazy load na view)
     conversas_formatadas = [conversa_to_viewtuple(c) for c in conversas]
 
     usuarios_busca = []
     if termo_busca:
-        usuarios_busca = Usuario.query.filter(
-            and_(
-                Usuario.id_usuario != current_user.id_usuario,
-                or_(
-                    Usuario.nome.ilike(f'%{termo_busca}%'),
-                    Usuario.email.ilike(f'%{termo_busca}%')
+        # Compatível com SQLite e Postgres: normaliza ambos lados com lower()
+        usuarios_encontrados = (Usuario.query
+            .filter(
+                and_(
+                    Usuario.id_usuario != current_user.id_usuario,
+                    or_(
+                        func.lower(Usuario.nome).like(f"%{termo_normalizado}%"),
+                        func.lower(Usuario.email).like(f"%{termo_normalizado}%")
+                    )
                 )
             )
-        ).all()
-        # reduzir ao essencial
+            .order_by(Usuario.nome.asc())
+            .all()
+        )
         usuarios_busca = [{
             "id_usuario": u.id_usuario,
             "nome": u.nome,
             "email": u.email
-        } for u in usuarios_busca]
+        } for u in usuarios_encontrados]
 
     return render_template(
         'chatsearch.html',
@@ -376,9 +407,10 @@ def criar_chat(receptor_id):
 
     ids = sorted([current_user.id_usuario, receptor_id])
 
-    conversa = Conversa.query.filter(
-        and_(Conversa.usuario1_id == ids[0], Conversa.usuario2_id == ids[1])
-    ).first()
+    conversa = (Conversa.query
+                .filter(and_(Conversa.usuario1_id == ids[0],
+                             Conversa.usuario2_id == ids[1]))
+                .first())
 
     if not conversa:
         conversa = Conversa(usuario1_id=ids[0], usuario2_id=ids[1])
@@ -400,14 +432,14 @@ def chat_conversa(conversa_id):
         flash('Acesso negado a esta conversa.', 'danger')
         return redirect(url_for('chattodos'))
 
-    # Descobre outro usuário (como dict) para o template
+    # Outro usuário (como dict)
     outro_id = conversa.usuario2_id if conversa.usuario1_id == current_user.id_usuario else conversa.usuario1_id
     outro = db.session.get(Usuario, outro_id)
     outro_usuario = {
-        "id_usuario": outro.id_usuario,
-        "nome": outro.nome,
-        "email": outro.email
-    } if outro else {"id_usuario": 0, "nome": "[usuário removido]", "email": ""}
+        "id_usuario": outro.id_usuario if outro else 0,
+        "nome": outro.nome if outro else "[usuário removido]",
+        "email": outro.email if outro else ""
+    }
 
     if request.method == 'POST':
         texto = (request.form.get('mensagem') or "").strip()
@@ -418,14 +450,13 @@ def chat_conversa(conversa_id):
                 db.session.add(nova)
                 db.session.commit()
                 return redirect(url_for('chat_conversa', conversa_id=conversa_id))
-            except Exception as e:
+            except Exception:
                 db.session.rollback()
+                log.exception("[CHAT POST] erro ao enviar mensagem")
                 flash('Não foi possível enviar a mensagem agora.', 'warning')
-                print(f"[CHAT POST] {e}")
         else:
             flash('A mensagem não pode estar vazia.', 'warning')
 
-    # Carrega mensagens já concretas (listas simples) pra evitar lazy-load
     msgs = (Mensagem.query
             .filter_by(conversa_id=conversa_id)
             .order_by(Mensagem.data_envio.asc())
@@ -448,5 +479,5 @@ def chat_conversa(conversa_id):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    # debug=True só em dev
+    # Em produção, use um servidor WSGI (gunicorn/uwsgi). Debug somente em dev.
     app.run(debug=True)
