@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Boost - Login</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* ========================== */
+        /* === VARIÁVEIS DE CORES === */
+        /* ========================== */
+        :root {
+            --color-dark: #0A1428; 
+            --color-bg-darker: #07111C; 
+            --color-medium-blue: #1A345C; /* Fundo do Card (base glass) */
+            --color-input-bg: #0d1e3a; /* Fundo sutil para inputs */
+            --color-accent: #00A6FF;
+            --color-accent-hover: #0088dd;
+            --color-text: #ffffff;
+            --color-muted: rgba(255,255,255,0.6);
+            --radius: 14px;
+            --font: 'Poppins', sans-serif;
+        }
+
+        /* ======================== */
+        /* === ESTILOS GERAIS === */
+        /* ======================== */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: var(--font);
+            /* Gradiente de fundo consistente */
+            background: linear-gradient(135deg, var(--color-dark), var(--color-bg-darker));
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--color-text);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { text-decoration: none; color: var(--color-muted); transition: color 0.2s; }
+        a:hover { color: var(--color-text); }
+
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            padding: 25px;
+        }
+
+        /* ======================== */
+        /* === CABEÇALHO === */
+        /* ======================== */
+        .header {
+            position: relative;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .back-arrow {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.6em;
+            color: var(--color-muted);
+            cursor: pointer;
+            transition: color 0.2s, transform 0.1s;
+        }
+
+        .back-arrow:hover {
+            color: var(--color-accent);
+        }
+        .back-arrow:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        /* ======================== */
+        /* === CARD E FORMULÁRIO === */
+        /* ======================== */
+        .card {
+            /* Estilo de Glassmorphism mais refinado */
+            background: rgba(26, 52, 92, 0.7); /* Usando a cor medium blue com transparência */
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 40px 30px; /* Mais padding */
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .avatar-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            /* Fundo sutil e borda de destaque */
+            background: rgba(0, 166, 255, 0.1); 
+            border: 3px solid var(--color-accent);
+            margin: 0 auto 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-circle i {
+            font-size: 48px;
+            color: var(--color-accent);
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 8px;
+            color: var(--color-muted);
+            font-size: 0.9em;
+        }
+
+        .form-group input {
+            width: 90%;
+            padding: 15px;
+            background: var(--color-input-bg);
+            color: var(--color-text);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            outline: none;
+            font-size: 1em;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 10px rgba(0, 166, 255, 0.5);
+        }
+
+        .help-link {
+            text-align: right;
+            margin-top: 5px;
+            margin-bottom: 30px;
+        }
+
+        .help-link a {
+            color: var(--color-muted);
+            font-size: .95em;
+        }
+        .help-link a:hover {
+            color: var(--color-text);
+        }
+
+        .action-button {
+            width: 100%;
+            padding: 16px;
+            background: var(--color-accent);
+            border-radius: 12px;
+            border: none;
+            font-size: 1.15em;
+            font-weight: 700;
+            color: var(--color-dark); /* Texto escuro no botão claro */
+            cursor: pointer;
+            transition: 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 166, 255, 0.4);
+        }
+
+        .action-button:hover {
+            background: var(--color-accent-hover);
+            box-shadow: 0 8px 25px rgba(0, 166, 255, 0.6);
+        }
+        .action-button:active {
+            transform: scale(0.98);
+            box-shadow: 0 4px 15px rgba(0, 166, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <a href="javascript:history.back()" aria-label="Voltar">
+            <i class="fas fa-arrow-left back-arrow"></i>
+        </a>
+        <h1>Acessar Conta</h1>
+    </div>
+
+    <div class="card">
+
+        <div class="avatar-circle">
+            <i class="fas fa-lock"></i> 
+        </div>
+
+        <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input placeholder="exemplo@dominio.com" type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input placeholder="Digite sua senha" type="password" id="senha" name="senha" required>
+            </div>
+
+            <div class="help-link">
+                <a href="#">Esqueceu a senha?</a>
+            </div>
+
+            <button type="submit" class="action-button">Entrar</button>
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>

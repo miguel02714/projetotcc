@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Boost - Login</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        /* Variáveis CSS para Cores - Padronização */
+        :root {
+            --color-dark-blue: #0A1428;
+            --color-light-blue: #00A6FF; 
+            --color-white: #FFFFFF;
+            --color-gray: #DDDDDD;
+            --shadow-text: 1px 1px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Estilos Globais e Fundo */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Poppins', sans-serif; /* Fonte moderna e padronizada */
+            color: var(--color-white);
+            overflow: hidden; 
+        }
+
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* CORREÇÃO: Usando URL da imagem e aplicando filtro para escurecer */
+            background-image: url("https://i.postimg.cc/Bv3hPsrB/fundo.png"); 
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.65) blur(1px); /* Escurece e desfoca suavemente o fundo */
+            z-index: -1; 
+            transition: filter 0.5s ease;
+        }
+
+        /* Container Principal (Layout Flex) */
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around; /* Distribui o espaço entre os elementos */
+            align-items: center;
+            height: 100%;
+            padding: 5vh 20px 8vh; /* Padding vertical ajustado por viewport height (vh) */
+            box-sizing: border-box;
+            text-align: center;
+            /* Efeito de Vidro (Opcional, mas moderno) */
+            /* backdrop-filter: blur(5px); */ 
+        }
+
+        /* Seção de Título/Texto */
+        .header-text {
+            /* Alinhamento superior ligeiramente ajustado */
+            padding-top: 5vh; 
+            max-width: 350px;
+        }
+
+        .header-text h1 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem); /* Tamanho de fonte responsivo */
+            font-weight: 800;
+            line-height: 1.3;
+            margin: 0;
+            text-shadow: var(--shadow-text);
+        }
+
+        /* Seção do Ícone (Avatar/Logo) */
+        .avatar-section {
+            margin: 5vh 0; /* Espaçamento vertical flexível */
+        }
+        
+        .avatar-section img {
+            width: 180px; /* Tamanho ligeiramente maior para destaque */
+            height: 180px;
+            object-fit: contain;
+            border-radius: 50%; /* Mantém o formato circular (se a imagem de fundo for transparente/circular) */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Seção de Ações (Botões) */
+        .action-buttons {
+            width: 100%;
+            max-width: 320px; /* Largura máxima um pouco maior */
+        }
+
+        .action-buttons button {
+            display: block; /* Garante que o botão ocupe a largura total do form/div */
+            width: 100%;
+            padding: 18px 20px; /* Mais padding para um toque maior */
+            margin-bottom: 15px;
+            font-size: 1.15em;
+            font-weight: 700;
+            color: var(--color-dark-blue);
+            background-color: var(--color-white);
+            border: none;
+            border-radius: 12px; /* Cantos mais suaves */
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-buttons button:hover {
+            background-color: var(--color-gray);
+        }
+        
+        /* Efeito de clique moderno */
+        .action-buttons button:active {
+            transform: scale(0.97); 
+        }
+
+        /* Estilo para o botão Cadastre-se (Opcional: Estilo de botão secundário) */
+        .action-buttons form:last-child button {
+            background-color: transparent;
+            color: var(--color-light-blue);
+            border: 2px solid var(--color-light-blue);
+            box-shadow: none;
+        }
+        
+        .action-buttons form:last-child button:hover {
+            background-color: rgba(0, 166, 255, 0.1);
+            color: var(--color-light-blue);
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="background-container"></div>
+
+    <div class="container">
+        <div class="header-text">
+            <h1>
+                Estude melhor, aprenda mais. Seu sucesso começa aqui!
+            </h1>
+        </div>
+
+        <div class="avatar-section">
+            <img src="https://i.postimg.cc/3w4kZB8V/logo.png" alt="Logo Brain Boost">
+        </div>
+
+        <div class="action-buttons">
+            <form action="/loginentrar" method="get">
+                <button type="submit">
+                    <i class="ri-login-box-line" style="margin-right: 8px;"></i> Login
+                </button>
+            </form>
+            
+            <form action="/registroentrar" method="get">
+                <button type="submit">
+                    <i class="ri-user-add-line" style="margin-right: 8px;"></i> Cadastre-se
+                </button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

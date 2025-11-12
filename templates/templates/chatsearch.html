@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title | default('Central de Comunicação') }}</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #07111C;
+            --card: #0C1826;
+            --card-2: #102232;
+            --text: #ffffff;
+            --muted: #9bb3c9;
+            --accent: #3EB6FF;
+            --green: #34d399;
+            --radius: 18px;
+            --shadow: 0 6px 22px rgba(0,0,0,.45);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            /* Uso da fonte Inter importada acima */
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding-bottom: 90px;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            margin-top: 20px;
+        }
+
+        /* Campo de busca */
+        .search-box input {
+            width: 100%;
+            padding: 12px;
+            border-radius: var(--radius);
+            border: none;
+            background: var(--card-2);
+            color: var(--text);
+            outline: none;
+            margin-bottom: 18px;
+            /* Garante que o input preenche a largura total do contêiner */
+            box-sizing: border-box;
+        }
+
+        /* Cards */
+        .card-item {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 18px;
+            margin-bottom: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        /* Lista */
+        .list-item-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            text-decoration: none;
+            color: var(--text);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            /* Transição para efeito hover suave */
+            transition: background-color 0.2s;
+        }
+
+        .list-item-link:last-child { 
+            border-bottom: none; 
+        }
+
+        .list-item-link i {
+            font-size: 32px;
+            margin-right: 12px;
+            color: var(--muted);
+        }
+
+        .list-item-link:hover {
+            /* Pequena alteração de cor ao passar o mouse para feedback visual */
+            background-color: rgba(255, 255, 255, 0.02);
+            border-radius: 8px; /* Adicionado para envolver o padding/efeito */
+            padding-left: 5px;
+            padding-right: 5px;
+            margin-left: -5px;
+            margin-right: -5px;
+        }
+
+        /* Navbar inferior */
+        .toolbar-bottom {
+            position: fixed;
+            bottom: 0; left: 0;
+            width: 100%;
+            background: var(--card);
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding: 10px 0;
+            z-index: 999;
+        }
+
+        .toolbar-inner {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .toolbar-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 12px;
+            transition: 0.2s;
+        }
+
+        .toolbar-link i { font-size: 24px; }
+
+        .toolbar-link.active-chat { color: var(--accent); }
+        .toolbar-link:hover { color: var(--accent); }
+    </style>
+</head>
+
+<body>
+
+    <h2 class="page-title"><i class="ri-chat-3-fill"></i> Central de Comunicação</h2>
+
+    <div style="padding: 18px;">
+
+        <form method="GET" class="search-box">
+            <input type="text" name="busca" placeholder="Buscar pelo nome ou email..." value="{{ termo_busca | default('') }}">
+        </form>
+
+        
+
+        {% if termo_busca and usuarios_encontrados %}
+            <div class="card-item">
+                <h4>Usuários Encontrados (Clique para Iniciar)</h4>
+                {% for user in usuarios_encontrados %}
+                    <a href="{{ url_for('criar_chat', receptor_id=user.id_usuario) }}" class="list-item-link">
+                        <div style="display:flex;align-items:center;">
+                            <i class="ri-user-add-fill"></i>
+                            <div>
+                                <strong>{{ user.nome }}</strong>
+                                <div style="font-size:11px;color:var(--muted);">{{ user.email }}</div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+
+        {% elif termo_busca %}
+            <p style="text-align:center;color:var(--muted);padding:10px 0;">Nenhum resultado para "{{ termo_busca }}"</p>
+        {% endif %}
+
+        <div class="card-item">
+            <h4>Últimas Conversas</h4>
+
+            {% if conversas %}
+                {% for contato, ultima_data in conversas %}
+                    <a href="{{ url_for('criar_chat', receptor_id=contato.id_usuario) }}" class="list-item-link">
+                        <div style="display:flex;align-items:center;">
+                            <i class="ri-user-3-fill"></i>
+                            <div>
+                                <strong>{{ contato.nome }}</strong>
+                                <div style="font-size:11px;color:var(--muted);">{{ contato.turma | default('Sem turma') }}</div>
+                            </div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="color:var(--green);font-size:13px;">{{ ultima_data.strftime('%H:%M') }}</div>
+                            <div style="color:var(--muted);font-size:11px;">{{ ultima_data.strftime('%d/%m') }}</div>
+                        </div>
+                    </a>
+                {% endfor %}
+            {% else %}
+                <p style="text-align:center;color:var(--muted);padding:10px 0;">Nenhuma conversa recente</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <div class="toolbar-bottom">
+        <nav class="toolbar-inner display-flex">
+
+    <a href="{{ url_for('inicio') }}" class="toolbar-link active-home" aria-label="Início">
+        <i class="ri-home-5-fill"></i> 
+        <span>Home</span>
+    </a>
+
+    <a href="{{ url_for('chattodos') }}" class="toolbar-link active-chat" aria-label="Chat">
+        <i class="ri-chat-3-fill"></i> 
+        <span>Chat</span>
+    </a>
+
+    <a href="{{ url_for('quizboost') }}" class="toolbar-link" aria-label="Jogos">
+        <i class="ri-gamepad-fill"></i>
+        <span>Jogos</span>
+    </a>
+
+    
+    
+    <a href="{{ url_for('relaxar') }}" class="toolbar-link" aria-label="Relaxar">
+        <i class="ri-timer-2-fill"></i>
+        <span>Relaxar</span>
+    </a>
+
+</nav>
+    </div>
+
+</body>
+</html>

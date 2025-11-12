@@ -1,0 +1,19 @@
+<div class="modal-overlay" id="addTaskModal">
+                <div class="modal-content">
+                    <h3>Adicionar Nova Tarefa</h3>
+                    <form id="addTaskForm">
+                        <input type="text" id="taskTitle" placeholder="Título da Tarefa (ex: Prova de Matemática)" required>
+                        <input type="text" id="taskDescription" placeholder="Detalhes (ex: Capítulo 3)" required>
+                        <input type="date" id="taskDate" required>
+                        <select id="taskPriority" required>
+                            <option value="normal">Prioridade: Normal (Estudo)</option>
+                            <option value="important">Prioridade: Importante (Trabalho/Revisão)</option>
+                            <option value="urgent">Prioridade: Urgente (Prova/Entrega)</option>
+                        </select>
+                        <div class="button-group">
+                            <button type="button" class="btn-cancel" id="closeModal">Cancelar</button>
+                            <button type="submit" class="btn-add">Adicionar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0095FF">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <title>{{ title if title else 'Editar Perfil | Brain Boost' }}</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+<style>
+    /* ======================================= */
+    /* == ESTILOS GERAIS E LAYOUT PRINCIPAL == */
+    /* ======================================= */
+
+    :root {
+        /* Paleta de Cores Primária */
+        --color-dark-blue: #0A1428; /* Fundo Principal */
+        --color-medium-blue: #1A345C; /* Fundo do Navbar/Destaque */
+        --color-light-blue: #00A6FF; /* Principal (Acento) */
+        --color-yellow: #FFC74F; 
+        --color-green-card: #2ECC71; 
+        --color-red-card: #E74C3C; 
+        --color-white: #FFFFFF;
+        --color-text-light: rgba(255, 255, 255, 0.95);
+        --color-text-faded: rgba(255, 255, 255, 0.6); /* Mais suave */
+        --color-input-border: #3A5A7F;
+        --color-card-shadow: rgba(0, 0, 0, 0.35);
+
+        /* Tipografia */
+        --font-main: 'Poppins', sans-serif;
+        --font-size-base: 1rem;
+        --font-size-small: clamp(0.75rem, 2vw, 0.875rem);
+        --font-size-large: clamp(1.5rem, 6vw, 2rem); /* Aumentado */
+    }
+
+    /* BASE E LINKS */
+    body {
+        background-color: var(--color-dark-blue);
+        font-family: var(--font-main);
+        color: var(--color-text-light);
+        margin: 0;
+        padding: 0;
+        padding-bottom: clamp(75px, 15vh, 95px); 
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        line-height: 1.5; /* Melhor leitura */
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    a {
+        color: var(--color-light-blue);
+        text-decoration: none;
+        transition: opacity 0.2s ease, transform 0.1s ease;
+    }
+    
+    a:active {
+        transform: scale(0.95); /* Efeito mais sutil e moderno */
+    }
+
+    .page-content {
+        padding: 0 clamp(20px, 5vw, 30px); /* Mais padding lateral */
+        padding-top: 15px; 
+        max-width: 520px;
+        margin: 0 auto;
+    }
+    
+    h1 {
+        font-size: var(--font-size-large);
+        font-weight: 700;
+        color: var(--color-text-light);
+        margin-top: 0;
+        margin-bottom: 30px; /* Mais espaço */
+        text-align: center;
+        letter-spacing: -0.5px; /* Mais limpo */
+    }
+    
+    /* SCROLLBAR CLEAN - Mantido */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #111b33; }
+    ::-webkit-scrollbar-thumb { background: var(--color-medium-blue); border-radius: 10px; }
+
+
+    /* TOP NAVIGATION - Refinado */
+    .top-nav {
+        height: clamp(65px, 15vh, 85px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 15px;
+        position: relative;
+    }
+
+    .logo-app {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: clamp(110px, 28vw, 150px); /* Levemente maior */
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 5;
+    }
+    
+    .logo-app img {
+        display: block;
+        width: 100%;
+        filter: drop-shadow(0 0 5px rgba(0, 166, 255, 0.3)); /* Efeito neon sutil */
+    }
+    
+    .left-actions, .right-actions {
+        z-index: 10;
+        line-height: 1;
+    }
+
+    .left-actions .ri-arrow-left-line,
+    .right-actions i {
+        color: var(--color-light-blue);
+        font-size: clamp(28px, 6vw, 36px); /* Ícones levemente maiores */
+    }
+
+    .right-actions .ri-logout-box-r-line {
+        color: var(--color-red-card); 
+    }
+
+    
+    /* TOOLBAR INFERIOR - Mantido com refino no design */
+    .toolbar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: clamp(75px, 12vh, 95px); /* Um pouco mais de altura */
+        background: transparent;
+        z-index: 100;
+        padding-top: 10px;
+    }
+
+    .toolbar-inner {
+        background: var(--color-medium-blue);
+        border-radius: 50px;
+        height: clamp(60px, 10vh, 75px); /* Levemente mais alto */
+        margin: 0 12px;
+        box-shadow: 0 -8px 25px var(--color-card-shadow); /* Sombra mais intensa para destacar */
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0 5px;
+    }
+
+    .toolbar-link {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-text-faded);
+        font-weight: 500;
+        transition: color 0.2s ease, transform 0.1s ease;
+        height: 100%;
+        padding-top: 5px;
+    }
+
+    .toolbar-link.active-home {
+        color: var(--color-light-blue);
+        font-weight: 600;
+        filter: drop-shadow(0 0 5px rgba(0, 166, 255, 0.5)); /* Destaque sutil */
+    }
+
+    .toolbar-link i {
+        font-size: clamp(26px, 5.5vw, 34px); /* Ícones maiores */
+        line-height: 1;
+    }
+
+    .toolbar-link span {
+        display: none; 
+    }
+    
+    /* ======================================= */
+    /* ========== ESTILOS DO FORMULÁRIO ====== */
+    /* ======================================= */
+    
+    .profile-card {
+        background: var(--color-medium-blue);
+        border-radius: 20px; /* Bordas mais arredondadas */
+        padding: 30px 25px; /* Mais padding interno */
+        margin-bottom: 30px; /* Mais espaço abaixo */
+        box-shadow: 0 10px 30px var(--color-card-shadow); /* Sombra mais destacada */
+        border: 1px solid rgba(255, 255, 255, 0.05); /* Borda sutil */
+    }
+    
+    .profile-header {
+        text-align: center;
+        margin-bottom: 35px; /* Mais espaço */
+    }
+
+    .avatar-icon {
+        background-color: var(--color-light-blue);
+        color: var(--color-dark-blue);
+        width: 90px; /* Avatar maior */
+        height: 90px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3.5rem;
+        margin-bottom: 15px;
+        box-shadow: 0 0 15px rgba(0, 166, 255, 0.6); /* Destaque no avatar */
+    }
+
+    .user-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+        color: var(--color-yellow);
+        text-shadow: 0 0 5px rgba(255, 199, 79, 0.4);
+    }
+    
+    .form-group {
+        margin-bottom: 22px; /* Mais espaçamento entre grupos */
+    }
+
+    .form-group label {
+        display: block;
+        font-size: var(--font-size-small);
+        color: var(--color-text-faded);
+        margin-bottom: 8px; /* Mais espaçamento */
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 14px; /* Mais padding interno */
+        border-radius: 12px; /* Mais arredondado */
+        border: 1px solid var(--color-input-border);
+        background-color: #0d1e3a; /* Cor de fundo ligeiramente diferente para inputs */
+        color: var(--color-text-light);
+        font-size: var(--font-size-base);
+        transition: border-color 0.3s, box-shadow 0.3s;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .form-group input:focus {
+        border-color: var(--color-light-blue);
+        outline: none;
+        box-shadow: 0 0 8px rgba(0, 166, 255, 0.5), inset 0 2px 4px rgba(0, 0, 0, 0.2); /* Destaque no focus */
+    }
+    
+    /* Seção de Senha separada */
+    .password-section {
+        margin-top: 40px;
+        padding-top: 25px;
+        border-top: 1px dashed var(--color-input-border); /* Linha tracejada mais elegante */
+    }
+
+    .password-section h3 {
+        color: var(--color-text-light);
+        font-size: 1.25rem; /* Título maior */
+        font-weight: 600;
+        margin-top: 0;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    /* Botão Salvar */
+    .btn-save {
+        width: 100%;
+        padding: 16px; /* Mais padding */
+        background-color: var(--color-light-blue);
+        color: var(--color-dark-blue);
+        border: none;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1.1rem; /* Fonte maior */
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s;
+        margin-top: 30px; /* Mais espaço acima */
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 6px 20px rgba(0, 166, 255, 0.4); /* Sombra para destacar */
+    }
+    
+    .btn-save:hover {
+        background-color: #0088dd; /* Escurece um pouco no hover/touch */
+        box-shadow: 0 8px 25px rgba(0, 166, 255, 0.6);
+    }
+
+    .btn-save:active {
+        transform: scale(0.98);
+        box-shadow: 0 4px 15px rgba(0, 166, 255, 0.3);
+    }
+    
+</style>
+
+</head>
+
+<body>
+    <div id="app">
+
+        <div class="view view-main">
+
+            <div class="toolbar toolbar-bottom">
+                <nav class="toolbar-inner display-flex">
+
+    <a href="{{ url_for('inicio') }}" class="toolbar-link active-home" aria-label="Início">
+        <i class="ri-home-5-fill"></i> 
+        <span>Home</span>
+    </a>
+
+    <a href="{{ url_for('chattodos') }}" class="toolbar-link active-chat" aria-label="Chat">
+        <i class="ri-chat-3-fill"></i> 
+        <span>Chat</span>
+    </a>
+
+    <a href="{{ url_for('quizboost') }}" class="toolbar-link" aria-label="Jogos">
+        <i class="ri-gamepad-fill"></i>
+        <span>Jogos</span>
+    </a>
+
+   
+    
+    <a href="{{ url_for('relaxar') }}" class="toolbar-link" aria-label="Relaxar">
+        <i class="ri-timer-2-fill"></i>
+        <span>Relaxar</span>
+    </a>
+
+</nav>
+            </div>
+            
+            <div data-name="edit-user" class="page color-theme-blue">
+                <header class="top-nav">
+                    
+                    <div class="left-actions">
+                        <a href="{{ url_for('inicio') }}" aria-label="Voltar">
+                            <i class="ri-arrow-left-line"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="logo-app">
+                        <img src="https://i.postimg.cc/3w4kZB8V/logo.png" alt="Brain Boost Logo">
+                    </div>
+                    
+                    <div class="right-actions">
+                        <a href="{{ url_for('logout') }}" aria-label="Sair">
+                            <i class="ri-logout-box-r-line"></i> 
+                        </a>
+                    </div>
+                </header>
+                
+                <main class="page-content">
+                    
+                    
+
+                    <h1><i class="mdi mdi-account-cog"></i> Editar Perfil</h1>
+
+                    <section class="profile-card">
+                        
+                        <div class="profile-header">
+                            <div class="avatar-icon">
+                                <i class="mdi mdi-account-circle-outline"></i>
+                            </div>
+                            <p class="user-name">{{ usuario.nome }}</p>
+                        </div>
+
+                        <form action="{{ url_for('editar_usuario', id_usuario=usuario.id_usuario) }}" method="POST">
+                            
+                            <div class="form-group">
+                                <label for="nome">Nome Completo</label>
+                                <input type="text" id="nome" name="nome" value="{{ usuario.nome }}" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" value="{{ usuario.email }}" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="turma">Turma / Série</label>
+                                <input type="text" id="turma" name="turma" value="{{ usuario.turma if usuario.turma is defined else '' }}" placeholder="Ex: 3º Ano B">
+                            </div>
+
+                            <div class="password-section">
+                                <h3>Atualizar Senha</h3>
+                                
+                                <div class="form-group">
+                                    <label for="senha_atual">Senha Atual</label>
+                                    <input type="password" id="senha_atual" name="senha_atual" placeholder="Digite sua senha atual">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="nova_senha">Nova Senha</label>
+                                    <input type="password" id="nova_senha" name="nova_senha" placeholder="Mínimo 6 caracteres">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="confirmar_senha">Confirmar Nova Senha</label>
+                                    <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Confirme a nova senha">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-save">Salvar Alterações</button>
+                            
+                        </form>
+                    </section>
+
+                </main>
+            </div>
+            
+        </div>
+    </div>
+    
+</body>
+
+</html>

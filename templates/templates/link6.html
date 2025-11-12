@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#2BAA5C">
+    <title>Brain Boost - Relaxar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+    
+    <style>
+        /* ======================================= */
+        /* == 1. Variáveis e Reset / Base         */
+        /* ======================================= */
+
+        :root {
+            /* Paleta de Cores (Padronizada) */
+            --color-dark-blue: #0A1428;
+            --color-medium-blue: #1A345C;
+            --color-light-blue: #00A6FF;
+            --color-yellow: #FFC74F;
+            --color-green-accent: #ffffff; /* Usado no theme-color e como acento primário */
+            --color-text-light: rgba(255, 255, 255, 0.95);
+            --color-text-faded: rgba(255, 255, 255, 0.5);
+            --color-timer-bg: #172a48; /* Cor mais escura para o gradiente do timer */
+
+            /* Layout */
+            --toolbar-height-outer: clamp(65px, 12vh, 85px);
+            --toolbar-height-inner: clamp(55px, 9vh, 70px);
+            --font-main: 'Poppins', sans-serif;
+            --main-padding: 15px;
+        }
+
+        body, .page, .view {
+            background-color: var(--color-dark-blue);
+            font-family: var(--font-main);
+            color: var(--color-text-light);
+            min-height: 100vh;
+            margin: 0;
+            padding-bottom: var(--toolbar-height-outer);
+        }
+
+        a {
+            color: var(--color-light-blue);
+            text-decoration: none;
+            transition: opacity 0.2s ease, transform 0.1s ease;
+        }
+        
+        a:active, button:active {
+            transform: scale(0.98);
+        }
+
+        .page-content {
+            padding: 0 var(--main-padding);
+            box-sizing: border-box;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+        
+        .page-content-meditacao {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: calc(100vh - 60px - var(--toolbar-height-outer));
+            padding-bottom: 20px;
+        }
+
+        /* ======================================= */
+        /* == 2. Navegação Superior e Toolbar     */
+        /* ======================================= */
+        .top-nav {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--main-padding);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .btn-voltar {
+            color: var(--color-text-light);
+            font-size: 28px;
+        }
+        .btn-voltar i {
+             color: var(--color-text-light);
+        }
+
+        .toolbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--toolbar-height-outer);
+            background: transparent;
+            z-index: 100;
+            padding-top: 10px;
+            max-width: 540px; /* Garante que a toolbar não exceda o conteúdo principal */
+            margin: 0 auto;
+        }
+
+        .toolbar-inner {
+            background: var(--color-medium-blue);
+            border-radius: 50px;
+            height: var(--toolbar-height-inner);
+            margin: 0 10px;
+            box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .toolbar-link {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-faded);
+            font-weight: 500;
+            transition: color 0.2s ease, transform 0.1s ease;
+        }
+
+        .toolbar-link.active {
+            color: var(--color-green-accent); /* Usa a variável de acento */
+            font-weight: 700;
+            transform: scale(1.1);
+        }
+
+        .toolbar-link i {
+            font-size: clamp(24px, 5vw, 32px);
+            line-height: 1;
+        }
+
+        .toolbar-link span {
+            display: none;
+        }
+
+        /* ======================================= */
+        /* == 3. Conteúdo Principal (Meditação)   */
+        /* ======================================= */
+
+        .conteudo-meditacao {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex-grow: 1;
+            justify-content: space-between;
+            padding-top: 20px;
+        }
+
+        .meditacao-header { 
+            margin-bottom: 40px; 
+            width: 100%;
+        }
+        
+        .meditacao-titulo { 
+            font-size: 2.2rem; 
+            color: var(--color-text-light); 
+            font-weight: 800; 
+            margin: 0; 
+        }
+        
+        .meditacao-subtitulo { 
+            font-size: 1rem; 
+            color: var(--color-text-light); 
+            opacity: 0.7; 
+            margin: 5px 0 0 0; 
+            font-weight: 300;
+        }
+        
+        /* Círculo do Timer */
+        .timer-e-relogio {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            width: 100%;
+        }
+        
+        .timer-circulo-container {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-medium-blue) 0%, var(--color-timer-bg) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.05);
+            margin-bottom: 50px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        /* Animação de Pulsar (opcional) */
+        .timer-circulo-container.running-pulse {
+            box-shadow: 0 0 30px var(--color-green-accent), 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .timer-display { 
+            font-size: 3.5rem; 
+            color: var(--color-green-accent); 
+            font-weight: 700; 
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px rgba(43, 170, 92, 0.5); /* Sombra suave para o acento */
+        }
+        
+        /* Botões */
+        .botoes-alinhados {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 40px;
+        }
+        
+        .btn-meditacao {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-green-accent);
+            color: var(--color-dark-blue);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(43, 170, 92, 0.4);
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            width: 100%;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-meditacao i {
+            font-size: 1.2rem;
+            color: var(--color-dark-blue);
+            transition: all 0.2s ease;
+        }
+        
+        .btn-meditacao.running {
+            background-color: var(--color-medium-blue);
+            color: var(--color-green-accent);
+            border: 2px solid var(--color-green-accent);
+            box-shadow: none;
+        }
+        
+        .btn-meditacao.running i {
+            color: var(--color-green-accent);
+        }
+        
+        .relogio-container { 
+            margin-left: 15px;
+            flex-shrink: 0;
+        }
+        
+        .btn-config {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--color-medium-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-light);
+            font-size: 22px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .btn-config.disabled { /* Estilo para o botão de config desativado */
+             opacity: 0.5;
+             pointer-events: none;
+        }
+
+        /* ======================================= */
+        /* == 4. Seletor de Tempo (Modal Inferior)*/
+        /* ======================================= */
+        
+        .time-selector-container {
+            display: none; 
+            position: fixed;
+            bottom: 0; 
+            left: 50%;
+            transform: translate(-50%, 100%);
+            background: var(--color-medium-blue);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+            z-index: 20;
+            transition: transform 0.3s ease-out;
+            max-width: 520px;
+            width: calc(100% - 20px); /* 100% - 10px de margin em cada lado */
+            box-sizing: border-box;
+        }
+        
+        .time-selector-container.open {
+            display: block;
+            transform: translate(-50%, calc(0px - var(--toolbar-height-inner) - 10px)); 
+        }
+        
+        .time-selector-container p {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--color-text-light);
+            text-align: center;
+        }
+
+        .time-options {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+        }
+        
+        .time-option {
+            background: #1c355c;
+            color: var(--color-text-light);
+            padding: 10px 0;
+            border-radius: 12px;
+            flex-grow: 1;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, border 0.2s ease;
+            border: 2px solid transparent;
+            text-align: center;
+            user-select: none;
+        }
+        
+        .time-option.selected-time {
+            background: var(--color-green-accent);
+            color: var(--color-dark-blue);
+            font-weight: 700;
+            border-color: var(--color-text-light);
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <div id="app">
+
+        <div class="view view-main">
+
+            <div class="toolbar toolbar-bottom">
+                    <nav class="toolbar-inner display-flex">
+
+    <a href="{{ url_for('inicio') }}" class="toolbar-link active-home" aria-label="Início">
+        <i class="ri-home-5-fill"></i> 
+        <span>Home</span>
+    </a>
+
+    <a href="{{ url_for('chattodos') }}" class="toolbar-link active-chat" aria-label="Chat">
+        <i class="ri-chat-3-fill"></i> 
+        <span>Chat</span>
+    </a>
+
+    <a href="{{ url_for('quizboost') }}" class="toolbar-link" aria-label="Jogos">
+        <i class="ri-gamepad-fill"></i>
+        <span>Jogos</span>
+    </a>
+
+    
+    
+    <a href="{{ url_for('relaxar') }}" class="toolbar-link" aria-label="Relaxar">
+        <i class="ri-timer-2-fill"></i>
+        <span>Relaxar</span>
+    </a>
+
+</nav>
+            </div>
+            
+            <div data-name="link6" class="page">
+
+                <header class="top-nav">
+                    
+                    
+                </header>
+
+                <main class="page-content page-content-meditacao">
+                    <div class="conteudo-meditacao">
+                        
+                        <div class="meditacao-header">
+                            <h1 class="meditacao-titulo">Mindfulness</h1>
+                            <p class="meditacao-subtitulo">Reconecte-se com o presente</p>
+                        </div>
+                        
+                        <div class="timer-e-relogio">
+                            <div class="timer-circulo-container" id="timer-circle">
+                                <h2 class="timer-display" id="timer-display">05:00</h2>
+                            </div>
+                        </div>
+
+                        <div class="botoes-alinhados">
+                            <button id="meditation-button" class="btn-meditacao">
+                                <i class="ri-play-fill"></i> Iniciar Meditação
+                            </button>
+                            
+                            <span class="relogio-container">
+                                <a href="#" id="config-button" class="btn-config" aria-label="Configurar tempo">
+                                    <i class="ri-settings-5-fill"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </main>
+            </div>
+            
+            <div id="time-selector" class="time-selector-container">
+                <p>Selecione a Duração</p>
+                <div class="time-options">
+                    <span class="time-option selected-time" data-time="300">5 Minutos</span>
+                    <span class="time-option" data-time="600">10 Minutos</span>
+                    <span class="time-option" data-time="900">15 Minutos</span>
+                    <span class="time-option" data-time="1200">20 Minutos</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Estruturando o Timer em um Objeto para melhor organização
+        const MeditationTimer = (function() {
+            const medButton = document.getElementById('meditation-button');
+            const configButton = document.getElementById('config-button');
+            const timeSelector = document.getElementById('time-selector');
+            const timeOptions = document.querySelectorAll('.time-option');
+            const timerDisplay = document.getElementById('timer-display');
+            const timerCircle = document.getElementById('timer-circle');
+
+            let countdownInterval = null;
+            let isRunning = false;
+            let defaultTimeInSeconds = 300; // 5 minutos padrão
+            let timeInSeconds = defaultTimeInSeconds;
+            let remainingTime = timeInSeconds;
+
+            // Helper para formatar segundos em MM:SS
+            function formatTime(totalSeconds) {
+                const minutes = Math.floor(totalSeconds / 60);
+                const seconds = totalSeconds % 60;
+                return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+
+            // Inicia o Timer
+            function startCountdown() {
+                if (remainingTime <= 0) return resetTimer();
+
+                isRunning = true;
+                medButton.classList.add('running');
+                medButton.innerHTML = '<i class="ri-pause-fill"></i> Pausar';
+                configButton.classList.add('disabled');
+                timerCircle.classList.add('running-pulse');
+
+                countdownInterval = setInterval(() => {
+                    remainingTime--;
+                    timerDisplay.textContent = formatTime(remainingTime);
+
+                    if (remainingTime <= 0) {
+                        finishTimer();
+                    }
+                }, 1000);
+            }
+
+            // Pausa o Timer
+            function pauseCountdown() {
+                clearInterval(countdownInterval);
+                isRunning = false;
+                medButton.classList.remove('running');
+                medButton.innerHTML = '<i class="ri-play-fill"></i> Continuar';
+                configButton.classList.remove('disabled');
+                timerCircle.classList.remove('running-pulse');
+            }
+            
+            // Conclui o Timer
+            function finishTimer() {
+                 clearInterval(countdownInterval);
+                 isRunning = false;
+                 medButton.classList.remove('running');
+                 medButton.innerHTML = '<i class="ri-check-fill"></i> Concluído!';
+                 configButton.classList.remove('disabled');
+                 timerCircle.classList.remove('running-pulse');
+                 
+                 // Lógica de feedback de conclusão (som, notificação, etc.)
+                 
+                 // Reseta após um breve período para o usuário ver a mensagem de conclusão
+                 setTimeout(resetTimer, 3000);
+            }
+
+            // Reseta o Timer para o tempo configurado
+            function resetTimer() {
+                clearInterval(countdownInterval);
+                isRunning = false;
+                remainingTime = timeInSeconds;
+                timerDisplay.textContent = formatTime(timeInSeconds);
+                medButton.classList.remove('running');
+                medButton.innerHTML = '<i class="ri-play-fill"></i> Iniciar Meditação';
+                configButton.classList.remove('disabled');
+                timerCircle.classList.remove('running-pulse');
+            }
+            
+            // Abre/Fecha o Seletor de Tempo
+            function toggleTimeSelector(e) {
+                e.preventDefault();
+                // Pausa se estiver rodando e abre o seletor
+                if (isRunning) {
+                    pauseCountdown();
+                }
+                timeSelector.classList.toggle('open');
+            }
+            
+            // Seleciona um novo tempo e reseta o timer
+            function selectNewTime() {
+                // Remove seleção de todos
+                timeOptions.forEach(opt => opt.classList.remove('selected-time'));
+                
+                // Adiciona seleção ao clicado
+                this.classList.add('selected-time');
+                
+                // Atualiza o tempo e reseta o cronômetro
+                timeInSeconds = parseInt(this.getAttribute('data-time'), 10);
+                defaultTimeInSeconds = timeInSeconds; // Mantém o tempo selecionado como novo padrão
+                resetTimer();
+                
+                // Fecha o seletor
+                timeSelector.classList.remove('open');
+            }
+
+            // Configura todos os Listeners
+            function setupListeners() {
+                medButton.addEventListener('click', function() {
+                    if (timeSelector.classList.contains('open')) return;
+                    
+                    if (isRunning) {
+                        pauseCountdown();
+                    } else {
+                        startCountdown();
+                    }
+                });
+                
+                configButton.addEventListener('click', toggleTimeSelector);
+                
+                timeOptions.forEach(option => {
+                    option.addEventListener('click', selectNewTime);
+                });
+            }
+
+            // Exposição da função de inicialização
+            return {
+                init: function() {
+                    timerDisplay.textContent = formatTime(timeInSeconds);
+                    setupListeners();
+                }
+            };
+        })();
+
+        // Inicializa o módulo quando o DOM estiver pronto
+        document.addEventListener('DOMContentLoaded', function() {
+            MeditationTimer.init();
+        });
+    </script>
+</body>
+
+</html>

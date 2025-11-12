@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#0095FF" />
+
+<title>{{ title or 'Brain Boost' }}</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+
+<style>
+:root {
+  --bg: #0C1A2D; /* Fundo mais escuro e sóbrio */
+  --card: #152742; /* Card mais escuro */
+  --accent: #3EB6FF;
+  --accent-light: #67C7FF;
+  --white: #fff;
+  --muted: rgba(255,255,255,0.65); /* Mais visível */
+  --font: 'Poppins', sans-serif;
+  --radius: 16px; /* Levemente menor */
+  --shadow-dark: 0 4px 12px rgba(0,0,0,0.5);
+  --shadow-card: 0 8px 18px rgba(0,0,0,0.4);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding-bottom: 100px; /* Mais espaço para a toolbar */
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* HEADER */
+.top-nav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 18px 20px; /* Maior espaçamento vertical e horizontal */
+  position: relative;
+  margin-top: 40px;
+}
+
+.logo-app {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+}
+.logo-app img {
+  width: clamp(100px, 26vw, 130px);
+  opacity: .95;
+}
+
+/* ICONS */
+.top-nav a {
+  color: var(--accent);
+  font-size: 28px; /* Ícones um pouco maiores */
+  margin-left: 16px;
+  transition: .3s;
+  line-height: 1; /* Alinhamento vertical */
+}
+.top-nav a:hover { color: var(--accent-light); }
+
+/* MAIN CONTENT */
+main {
+  width: min(90%, 520px); /* Largura maior */
+  margin: 0 auto;
+  padding-top: 10px; /* Menos padding no topo */
+}
+
+/* STREAK CARD */
+.streak-container {
+  /* Gradiente mais moderno */
+  background: linear-gradient(135deg, #2D4F85, #1B385D);
+  color: var(--white);
+  padding: 24px;
+  border-radius: var(--radius);
+  margin-top: 20px; /* Reduzindo margem superior */
+  box-shadow: var(--shadow-card);
+}
+.streak-container p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: flex; align-items:center; gap: 8px;
+}
+.streak-container b {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 1.2rem;
+}
+.streak-dias {
+  display: flex; justify-content: space-between;
+}
+.dia {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; justify-content:center; align-items:center;
+  background: rgba(255,255,255,0.1); /* Fundo mais sutil */
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition:.3s;
+}
+.dia.ativo { background:var(--accent); color:var(--card); font-weight: 700; }
+.dia.atual { 
+  background:#fff; 
+  color:var(--bg); 
+  transform:scale(1.15); 
+  box-shadow: 0 0 10px rgba(255,255,255,0.4);
+}
+
+/* CARDS LIST */
+.cards-list {
+  margin-top: 35px; /* Mais espaço entre streak e cards */
+  display:flex; flex-direction:column; gap:20px;
+}
+
+/* CARDS */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 18px 20px; /* Padding levemente ajustado */
+  display: flex;
+  align-items:center;
+  gap: 18px;
+  box-shadow: var(--shadow-dark);
+  border: 1px solid rgba(255,255,255,0.05); /* Borda sutil */
+  transition:.3s ease;
+}
+.card:hover { 
+  transform:translateY(-2px); 
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.card i { font-size: 36px; color: var(--accent); }
+.card p { margin:0; font-size:1.05rem; font-weight:500; }
+.card b { font-weight: 700; color: var(--accent-light); }
+.card span { font-size:.8rem; color: var(--muted); margin-top: 2px; display: block; }
+
+/* DESLOGADO */
+.deslogado {
+  margin-top: 100px;
+  text-align:center;
+}
+.deslogado h2 {
+  font-weight: 600;
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+.deslogado p {
+  color: var(--muted);
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.btn-acao {
+  display:block;
+  width: 100%;
+  max-width: 280px; /* Botões um pouco maiores */
+  margin: 12px auto;
+  padding: 15px; /* Padding maior */
+  border-radius: 10px; /* Borda levemente menor para os botões */
+  font-weight:600;
+  text-align:center;
+  transition: .3s ease;
+}
+.btn-login { 
+  background:var(--accent); 
+  color:#002544; 
+  box-shadow: 0 6px 15px rgba(62, 182, 255, 0.4);
+}
+.btn-login:hover {
+  background: var(--accent-light);
+}
+
+.btn-registro { 
+  border:2px solid var(--accent); 
+  color:var(--accent); 
+}
+.btn-registro:hover {
+  background: rgba(62, 182, 255, 0.1);
+}
+
+
+/* FOOTER (NAVBAR) */
+.toolbar-bottom {
+  position:fixed;
+  bottom:0; left:0; right:0;
+  padding: 14px 14px; /* Mais padding */
+  z-index: 10;
+}
+.toolbar-inner {
+  background: var(--card);
+  display:flex;
+  justify-content:space-around;
+  border-radius: 60px; /* Borda mais arredondada */
+  height:65px; /* Altura maior */
+  box-shadow: 0 -8px 25px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.08); /* Borda sutil */
+}
+.toolbar-link {
+  flex:1; text-align:center;
+  color: var(--muted);
+  font-size:12px;
+  font-weight: 500;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  transition:.3s;
+  gap: 2px;
+}
+.toolbar-link i { font-size:22px; } /* Ícones menores para harmonia */
+.toolbar-link.active,
+.toolbar-link:hover { 
+  color: var(--accent-light); 
+  font-weight: 600;
+}
+</style>
+</head>
+
+<body>
+<header class="top-nav">
+  <div class="logo-app">
+    <img src="https://i.postimg.cc/3w4kZB8V/logo.png" />
+  </div>
+  {% if current_user.is_authenticated %}
+    <a href="{{ url_for('perfil') }}"><i class="ri-user-3-fill"></i></a>
+    <a href="{{ url_for('logout') }}"><i class="ri-logout-box-r-line"></i></a>
+  {% else %}
+    <a href="{{ url_for('loginentrar') }}"><i class="ri-account-circle-fill"></i></a>
+  {% endif %}
+</header>
+
+<main>
+
+{% if current_user.is_authenticated %}
+
+  <section class="streak-container">
+    <p><i class="ri-fire-fill" style="color:#F24;"></i> Streak: <b>{{ dados_dinamicos.dias_seguidos }}</b> dias</p>
+    <div class="streak-dias">
+      {% set dias = ['S','T','Q','Q','S','S','D'] %}
+      {% for d in range(1,8) %}
+        <span class="dia {% if d <= dados_dinamicos.dias_seguidos %}ativo{% endif %} {% if d == dados_dinamicos.dia_atual_na_semana %}atual{% endif %}">
+          {{ dias[d-1] }}
+        </span>
+      {% endfor %}
+    </div>
+  </section>
+
+  <div class="cards-list">
+    <a href="{{ url_for('calendario') }}" class="card">
+      <i class="ri-calendar-todo-fill"></i>
+      <div>
+        <p>Próxima Prova em <b>{{ dados_dinamicos.dias_proxima_prova }}</b> dias</p>
+        <span>Ver agenda completa</span>
+      </div>
+    </a>
+
+    <a href="{{ url_for('relaxar') }}" class="card">
+      <i class="ri-leaf-fill"></i>
+      <div>
+        <p>Você relaxou {{ dados_dinamicos.minutos_relaxados_semana }} min na última semana</p>
+        <span>Meditar agora</span>
+      </div>
+    </a>
+  </div>
+
+{% else %}
+
+  <section class="deslogado">
+    <i class="ri-account-circle-line" style="font-size:5.5rem;color:var(--accent);"></i>
+    <h2>Bem-vindo(a) ao Brain Boost!</h2>
+    <p>Faça login ou crie sua conta para acompanhar seu progresso de estudos.</p>
+    <a href="{{ url_for('loginentrar') }}" class="btn-acao btn-login">Fazer Login</a>
+    <a href="{{ url_for('registroentrar') }}" class="btn-acao btn-registro">Criar Nova Conta</a>
+  </section>
+
+{% endif %}
+
+</main>
+
+<footer class="toolbar-bottom">
+  <nav class="toolbar-inner">
+    <a href="{{ url_for('inicio') }}" class="toolbar-link active">
+      <i class="ri-home-5-fill"></i>
+      <span>Início</span>
+    </a>
+    <a href="{{ url_for('chattodos') }}" class="toolbar-link">
+      <i class="ri-chat-3-fill"></i>
+      <span>Chat</span>
+    </a>
+    <a href="{{ url_for('quizboost') }}" class="toolbar-link">
+      <i class="ri-gamepad-fill"></i>
+      <span>Quiz</span>
+    </a>
+    <a href="{{ url_for('calendario') }}" class="toolbar-link">
+      <i class="ri-calendar-todo-fill"></i>
+      <span>Agenda</span>
+    </a>
+    <a href="{{ url_for('relaxar') }}" class="toolbar-link">
+      <i class="ri-timer-2-fill"></i>
+      <span>Timer</span>
+    </a>
+  </nav>
+</footer>
+
+</body>
+</html>

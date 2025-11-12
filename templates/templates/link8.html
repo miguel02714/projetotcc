@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>Brain Boost - Quiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+
+        :root {
+            --color-dark-blue: #0A1428; /* Fundo Principal */
+            --color-medium-blue: #1A345C; /* Fundo Secundário/Card */
+            --color-light-blue: #00A6FF; /* Primária/Ação */
+            --color-success: #2ECC71;
+            --color-error: #E74C3C;
+            --color-text-light: rgba(255, 255, 255, 0.95);
+            --color-text-muted: rgba(255, 255, 255, 0.65);
+            --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.35);
+            --shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.5);
+            --color-secondary-action: #1e3a6d; /* CORREÇÃO: Adicionado para hover de opção */
+        }
+
+        body {
+            background-color: var(--color-dark-blue);
+            color: var(--color-text-light);
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: var(--color-light-blue);
+            text-decoration: none;
+        }
+        
+        /* Efeito de clique */
+        .clickable:active { 
+            transform: scale(0.97); 
+            transition: transform 0.1s ease;
+        }
+
+        /* ===== ESTILO QUIZ GERAL / LAYOUT ===== */
+        .quiz-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 18px;
+            /* Aumenta o padding inferior para a toolbar */
+            padding-bottom: 90px; 
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Navbar e Títulos */
+        .navbar {
+            padding: 15px 0 20px; /* Mais espaço no topo */
+            width: 100%;
+            text-align: center;
+        }
+        .navbar .title {
+            font-size: 1.8rem; /* Título maior */
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--color-light-blue); /* Cor de destaque */
+        }
+
+        .quiz-subtitle {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            margin-top: 10px;
+            margin-bottom: 30px; /* Mais espaço */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Container Principal do Conteúdo */
+        #quiz-container {
+            width: 100%;
+            /* Limita a largura para dispositivos maiores e centraliza */
+            max-width: 500px; 
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .quiz-content-area, #category-selection {
+            display: none;
+            width: 100%;
+        }
+
+        /* ========================================================== */
+        /* == 2. Estilos da Tela de Seleção de Categoria         == */
+        /* ========================================================== */
+        #category-selection.active, .quiz-content-area.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .category-card {
+            background: var(--color-medium-blue);
+            border-radius: 20px; /* Mais arredondado */
+            padding: 25px; /* Mais padding */
+            margin-bottom: 20px; /* Mais espaçamento */
+            text-align: left;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border: 2px solid transparent; /* Adiciona borda para feedback visual */
+        }
+
+        .category-card:hover {
+            box-shadow: var(--shadow-lg);
+            border-color: var(--color-light-blue);
+        }
+
+        .category-card:active {
+            transform: scale(0.98);
+        }
+
+        .category-card i {
+            font-size: 3rem; /* Ícone maior */
+            color: var(--color-light-blue);
+            flex-shrink: 0;
+        }
+
+        .category-card h3 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 800; /* Mais destaque */
+        }
+
+        .category-card p {
+            margin: 4px 0 0;
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+
+        /* ========================================================== */
+        /* == 3. Estilos do Quiz (Pergunta e Opções)             == */
+        /* ========================================================== */
+        .quiz-question {
+            font-size: 1.35rem; /* Pergunta maior e mais legível */
+            font-weight: 700;
+            margin-bottom: 30px; /* Mais espaço */
+            line-height: 1.4;
+            color: var(--color-text-light);
+        }
+
+        /* Opções (Input Radio + Label) */
+        .quiz-options input[type="radio"] {
+            display: none;
+        }
+
+        .quiz-options label.quiz-option {
+            display: block;
+            text-align: left;
+            width: 100%;
+            margin-bottom: 15px;
+            background: var(--color-secondary-action); /* Fundo padrão mais escuro */
+            border-radius: 16px;
+            padding: 16px 20px; /* Mais padding */
+            font-size: 1.05rem; /* Fonte ligeiramente maior */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-sizing: border-box;
+            border: 3px solid transparent; /* Borda mais grossa */
+        }
+        
+        .quiz-options label.quiz-option:hover:not(.answered) {
+            background: var(--color-medium-blue); /* CORREÇÃO: Usando a cor Medium Blue no hover */
+        }
+
+        .quiz-options input[type="radio"]:checked + label.quiz-option:not(.answered) {
+            background: var(--color-medium-blue);
+            border-color: var(--color-light-blue);
+        }
+
+        /* Feedback de Resposta */
+        .quiz-options label.correct {
+            background-color: var(--color-success) !important;
+            border-color: var(--color-success) !important;
+            color: var(--color-dark-blue);
+            font-weight: 800;
+            transform: scale(1.02);
+        }
+
+        .quiz-options label.incorrect {
+            background-color: var(--color-error) !important;
+            border-color: var(--color-error) !important;
+            opacity: 0.8;
+            color: #fff;
+        }
+
+        /* Ações e Botões */
+        .quiz-actions {
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        .quiz-actions button, .quiz-actions a {
+            display: block;
+            border: none;
+            border-radius: 25px; /* Botões mais arredondados (pill shape) */
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            transition: opacity 0.2s ease, transform 0.1s ease;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px; /* Centraliza melhor em telas maiores */
+            margin: 15px auto; /* Mais espaçamento */
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            box-sizing: border-box; /* Adicionado para evitar estouro de largura */
+        }
+        .quiz-actions button:active, .quiz-actions a:active {
+            transform: scale(0.97);
+        }
+
+        #check-answer {
+            background: var(--color-light-blue);
+            color: var(--color-dark-blue);
+        }
+
+        #next-question {
+            background: var(--color-medium-blue);
+            color: var(--color-light-blue);
+            border: 2px solid var(--color-light-blue);
+            box-shadow: none;
+        }
+
+        #check-answer:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Resultado */
+        #result-container {
+            margin-top: 20px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            min-height: 25px;
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        #result-container i {
+            font-size: 1.5rem;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        .result-message-correct { color: var(--color-success); }
+        .result-message-incorrect { color: var(--color-error); }
+        
+        /* Estilo de End Quiz */
+        #quiz-end-message {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--color-light-blue);
+            margin: 40px 0;
+        }
+
+
+        /* ========================================================== */
+        /* == 4. Estilos da TOOLBAR INFERIOR (Barra de Navegação) == */
+        /* ========================================================== */
+        .toolbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0; /* Garante que cubra a largura total */
+            z-index: 100;
+            background: transparent; /* Fundo transparente para o efeito de inner */
+            padding: 8px 10px; /* Adiciona padding em torno da barra */
+        }
+        
+        .toolbar-inner {
+            background: var(--color-medium-blue);
+            border-radius: 50px; /* Efeito pill */
+            height: 65px; 
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6);
+            max-width: 520px; /* Limita a largura para centralizar em telas maiores */
+            margin: 0 auto;
+        }
+        
+        .toolbar-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1; /* Distribui o espaço uniformemente */
+            padding: 5px;
+            font-size: 0.75rem; 
+            color: var(--color-text-muted); 
+            font-weight: 500;
+            transition: color 0.2s ease, transform 0.1s ease;
+        }
+        
+        .toolbar-link i {
+            font-size: 1.6rem; 
+            margin-bottom: 2px;
+        }
+
+        /* Destaque para o link ativo (Jogos) */
+        .toolbar-link[aria-label="Jogos"] {
+            color: var(--color-light-blue);
+            font-weight: 700;
+        }
+        
+        /* ========================================================== */
+        /* == 5. Animações                                         == */
+        /* ========================================================== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+    <div data-name="quiz-matematica" class="page quiz-page">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="title">BRAIN BOOST QUIZ</div>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div id="quiz-container">
+
+                <div id="category-selection" class="active">
+                    <h2 class="quiz-subtitle">
+                        Escolha seu Desafio <i class="mdi mdi-select-group"></i>
+                    </h2>
+
+                    <div id="math-card" class="category-card clickable" data-category="matematica">
+                        <i class="mdi mdi-calculator-variant"></i>
+                        <div>
+                            <h3>Matemática</h3>
+                            <p>Desafios de lógica e raciocínio numérico.</p>
+                        </div>
+                    </div>
+
+                    <div id="portuguese-card" class="category-card clickable" data-category="portugues">
+                        <i class="mdi mdi-book-open-page-variant"></i>
+                        <div>
+                            <h3>Português</h3>
+                            <p>Gramática, ortografia e interpretação de texto.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="quiz-content" class="quiz-content-area">
+                    <h2 id="quiz-subtitle-display" class="quiz-subtitle">
+                        Matemática <i class="mdi mdi-math-compass"></i>
+                    </h2>
+
+                    <form id="quiz-form">
+                        <div id="question-container">
+                            <p class="quiz-question" id="current-question-text">Pergunta do Quiz...</p>
+
+                            <div class="quiz-options" id="quiz-options-container">
+                            </div>
+                        </div>
+
+                        <div id="result-container"></div>
+                        
+                        <div class="quiz-actions">
+                            <button type="submit" id="check-answer" class="clickable" disabled>Verificar Resposta</button>
+                            <a href="#" id="next-question" class="button-fill clickable" style="display: none;">Próxima Pergunta</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+       <div class="toolbar toolbar-bottom">
+    <nav class="toolbar-inner display-flex">
+
+    <a href="{{ url_for('inicio') }}" class="toolbar-link active-home" aria-label="Início">
+        <i class="ri-home-5-fill"></i> 
+        <span>Home</span>
+    </a>
+
+    <a href="{{ url_for('chattodos') }}" class="toolbar-link active-chat" aria-label="Chat">
+        <i class="ri-chat-3-fill"></i> 
+        <span>Chat</span>
+    </a>
+
+    <a href="{{ url_for('quizboost') }}" class="toolbar-link" aria-label="Jogos">
+        <i class="ri-gamepad-fill"></i>
+        <span>Jogos</span>
+    </a>
+
+    
+    
+    <a href="{{ url_for('relaxar') }}" class="toolbar-link" aria-label="Relaxar">
+        <i class="ri-timer-2-fill"></i>
+        <span>Relaxar</span>
+    </a>
+
+</nav>
+        </div>
+    </div>
+
+    <script>
+        const QUIZZES = {
+  "matematica": {
+    icon: "mdi-math-compass",
+    title: "Matemática",
+    questions: [
+      // OPERAÇÕES BÁSICAS
+      { q: "Qual é o resultado de 15 + 8 × 2?", a: "46", b: "31", c: "23", d: "42", correct: "b" },
+      { q: "Resolva: (9 + 3) × 2 – 4 =", a: "20", b: "16", c: "24", d: "22", correct: "a" },
+      { q: "Quanto é 100 ÷ (4 × 5)?", a: "4", b: "5", c: "6", d: "10", correct: "b" },
+      { q: "Calcule: 3² + 4² =", a: "12", b: "25", c: "7", d: "20", correct: "b" },
+      { q: "Quanto é 18 ÷ 3 + 6 × 2?", a: "14", b: "18", c: "22", d: "12", correct: "b" },
+      { q: "Qual é o resultado de 7 × (5 + 2)?", a: "49", b: "35", c: "21", d: "42", correct: "a" },
+      { q: "Resolva: (50 – 10) ÷ 4 =", a: "8", b: "10", c: "12", d: "20", correct: "b" },
+      { q: "Qual é o sucessor de 1999?", a: "2000", b: "1998", c: "1997", d: "2001", correct: "a" },
+      { q: "Se 4 × X = 24, então X =", a: "5", b: "6", c: "8", d: "7", correct: "b" },
+      { q: "Qual o dobro de 3,5?", a: "6", b: "7", c: "7,5", d: "8", correct: "b" },
+
+      // PORCENTAGEM
+      { q: "Quanto é 20% de 150?", a: "25", b: "30", c: "35", d: "40", correct: "b" },
+      { q: "Um produto custa R$200 e teve desconto de 15%. Qual é o novo preço?", a: "R$180", b: "R$170", c: "R$190", d: "R$150", correct: "a" },
+      { q: "Um aumento de 10% em R$300 resulta em:", a: "R$310", b: "R$330", c: "R$320", d: "R$305", correct: "b" },
+      { q: "50% de 80 equivale a:", a: "30", b: "40", c: "50", d: "60", correct: "b" },
+      { q: "Um celular passou de R$1000 para R$850. Qual foi o desconto percentual?", a: "15%", b: "20%", c: "10%", d: "25%", correct: "b" },
+      { q: "60% de 200 equivale a:", a: "100", b: "110", c: "120", d: "140", correct: "c" },
+      { q: "Um aumento de 25% sobre 80 é:", a: "85", b: "90", c: "100", d: "120", correct: "c" },
+      { q: "40% de 250 é:", a: "100", b: "90", c: "110", d: "80", correct: "a" },
+      { q: "10% de 350 equivale a:", a: "35", b: "30", c: "45", d: "40", correct: "a" },
+      { q: "75% de 200 é:", a: "100", b: "120", c: "150", d: "180", correct: "c" },
+
+      // FRAÇÕES
+      { q: "Qual é o resultado de 1/2 + 1/4?", a: "3/4", b: "2/6", c: "1/3", d: "2/3", correct: "a" },
+      { q: "Resolva: 2/3 – 1/6 =", a: "1/2", b: "1/3", c: "2/6", d: "5/6", correct: "a" },
+      { q: "Qual é o dobro de 3/4?", a: "3/2", b: "1/2", c: "6/4", d: "1/3", correct: "a" },
+      { q: "Qual é o resultado de 2/5 × 10?", a: "2", b: "3", c: "4", d: "5", correct: "d" },
+      { q: "3/4 de 100 equivale a:", a: "60", b: "70", c: "75", d: "80", correct: "c" },
+      { q: "Qual fração representa 0,25?", a: "1/2", b: "1/3", c: "1/4", d: "3/4", correct: "c" },
+      { q: "1/5 de 200 é:", a: "20", b: "30", c: "40", d: "50", correct: "d" },
+      { q: "Simplifique 6/9:", a: "2/3", b: "3/4", c: "1/3", d: "4/5", correct: "a" },
+      { q: "A soma de 2/6 + 1/3 é:", a: "1/2", b: "2/3", c: "1/4", d: "3/4", correct: "a" },
+      { q: "Qual é o inverso de 5/2?", a: "2/5", b: "1/5", c: "5/1", d: "1/2", correct: "a" },
+
+      // GEOMETRIA
+      { q: "Qual é a área de um quadrado com lado 8 cm?", a: "16 cm²", b: "32 cm²", c: "64 cm²", d: "80 cm²", correct: "c" },
+      { q: "O perímetro de um retângulo de lados 6 cm e 4 cm é:", a: "20 cm", b: "18 cm", c: "22 cm", d: "24 cm", correct: "a" },
+      { q: "A área de um triângulo de base 10 cm e altura 6 cm é:", a: "30 cm²", b: "60 cm²", c: "40 cm²", d: "25 cm²", correct: "a" },
+      { q: "O raio de um círculo é 7 cm. Sua área é aproximadamente (π = 3,14):", a: "154 cm²", b: "120 cm²", c: "140 cm²", d: "130 cm²", correct: "a" },
+      { q: "Quantos lados tem um decágono?", a: "8", b: "9", c: "10", d: "12", correct: "c" },
+      { q: "Um cubo tem aresta de 3 cm. Seu volume é:", a: "9 cm³", b: "18 cm³", c: "27 cm³", d: "30 cm³", correct: "c" },
+      { q: "A soma dos ângulos internos de um triângulo é:", a: "90°", b: "120°", c: "180°", d: "360°", correct: "c" },
+      { q: "O volume de um paralelepípedo 2×3×4 é:", a: "20", b: "24", c: "30", d: "18", correct: "b" },
+      { q: "O perímetro de um círculo de raio 10 (π=3,14) é:", a: "31,4", b: "62,8", c: "50", d: "40", correct: "b" },
+      { q: "Quantos graus tem cada ângulo de um quadrado?", a: "45°", b: "60°", c: "90°", d: "120°", correct: "c" },
+
+      // ÁLGEBRA E EQUAÇÕES
+      { q: "Resolva: 2x + 6 = 14", a: "x = 4", b: "x = 5", c: "x = 3", d: "x = 6", correct: "a" },
+      { q: "Em 3x = 21, qual é o valor de x?", a: "5", b: "6", c: "7", d: "8", correct: "c" },
+      { q: "Se x = 4, qual é o valor de 2x² + 1?", a: "33", b: "35", c: "32", d: "30", correct: "a" },
+      { q: "Qual é a raiz da equação x² = 49?", a: "6", b: "7", c: "8", d: "9", correct: "b" },
+      { q: "Se 5x = 60, x =", a: "10", b: "12", c: "15", d: "20", correct: "b" },
+      { q: "A expressão 3(x + 4) equivale a:", a: "3x + 4", b: "3x + 12", c: "3x + 7", d: "x + 7", correct: "b" },
+      { q: "Se x + 5 = 9, x =", a: "2", b: "3", c: "4", d: "5", correct: "c" },
+      { q: "Resolva: 6x – 4 = 14", a: "x = 2", b: "x = 3", c: "x = 4", d: "x = 5", correct: "c" },
+      { q: "Qual é o valor de x se 10x = 2x + 40?", a: "3", b: "4", c: "5", d: "6", correct: "c" },
+      { q: "Em 2x – 5 = 9, x =", a: "7", b: "6", c: "8", d: "9", correct: "a" },
+
+      // REGRA DE TRÊS E PROPORÇÃO
+      { q: "Se 4 laranjas custam R$ 8,00, quanto custam 10 laranjas?", a: "R$18,00", b: "R$20,00", c: "R$16,00", d: "R$15,00", correct: "b" },
+      { q: "3 operários fazem uma tarefa em 12 dias. Quantos dias levarão 6 operários?", a: "3", b: "4", c: "6", d: "8", correct: "c" },
+      { q: "Se 5 metros custam R$25, quanto custam 8 metros?", a: "R$35", b: "R$40", c: "R$45", d: "R$30", correct: "b" },
+      { q: "Um carro percorre 240 km com 20 L. Qual é o consumo em km/L?", a: "10", b: "12", c: "15", d: "20", correct: "b" },
+      { q: "Se 12 lápis custam R$24, quanto custam 5 lápis?", a: "R$9", b: "R$10", c: "R$12", d: "R$8", correct: "b" },
+]
+  },
+
+ "portugues": {
+    icon: "mdi-book-open-page-variant",
+    title: "Português",
+    questions: [
+      // ORTOGRAFIA E ACENTUAÇÃO
+      { q: "Qual palavra está escrita incorretamente?", a: "Exceção", b: "Concessão", c: "Secessão", d: "Excessão", correct: "d" },
+      { q: "Qual é a forma correta?", a: "Beneficiente", b: "Beneficente", c: "Beneficiento", d: "Benificente", correct: "b" },
+      { q: "A palavra 'pôde' com acento indica:", a: "Presente", b: "Passado", c: "Futuro", d: "Imperativo", correct: "b" },
+      { q: "Assinale a opção com todas as palavras acentuadas corretamente.", a: "Vôo, idéia, heróico", b: "Voo, ideia, heroico", c: "Voo, idéa, heróico", d: "Vôo, idéa, heróico", correct: "b" },
+      { q: "Qual palavra tem o mesmo som do 's' em 'casa'?", a: "Prazer", b: "Sopro", c: "Exame", d: "Rosa", correct: "a" },
+      { q: "Qual dessas palavras está errada conforme o novo acordo ortográfico?", a: "Micro-ondas", b: "Autoescola", c: "Antiético", d: "Co-herdeiro", correct: "d" },
+      { q: "A forma correta é:", a: "Perceptível", b: "Perseptível", c: "Percebtível", d: "Perseptívil", correct: "a" },
+      { q: "A palavra 'raiz' possui quantas sílabas?", a: "1", b: "2", c: "3", d: "4", correct: "b" },
+      { q: "A palavra 'também' é:", a: "Monossílaba", b: "Dissílaba", c: "Trissílaba", d: "Polissílaba", correct: "b" },
+      { q: "Qual é o plural de 'cidadão'?", a: "Cidadões", b: "Cidadãos", c: "Cidadães", d: "Cidões", correct: "b" },
+      { q: "A palavra 'fácil' recebe acento porque:", a: "É oxítona terminada em l", b: "É paroxítona terminada em l", c: "É proparoxítona", d: "É oxítona terminada em i", correct: "b" },
+      { q: "Qual é a forma correta do plural de 'pão'?", a: "Pões", b: "Pães", c: "Paons", d: "Pãos", correct: "b" },
+      { q: "Qual palavra está grafada incorretamente?", a: "Presságio", b: "Exceção", c: "Essessial", d: "Censura", correct: "c" },
+      { q: "A forma plural de 'mal' é:", a: "Maus", b: "Males", c: "Mauses", d: "Mausis", correct: "b" },
+      { q: "Qual é o feminino de 'ator'?", a: "Atora", b: "Atatriz", c: "Atra", d: "Atriz", correct: "d" },
+      { q: "A palavra 'história' é acentuada por ser:", a: "Oxítona", b: "Proparoxítona", c: "Paroxítona", d: "Monossílaba", correct: "b" },
+      { q: "A forma correta é:", a: "Reivindicar", b: "Reividicar", c: "Reivindicar", d: "Revindicar", correct: "a" },
+      { q: "O plural de 'lápis' é:", a: "Lápises", b: "Lápis", c: "Lápiseses", d: "Lápis's", correct: "b" },
+      { q: "A palavra 'fugiu' é:", a: "Verbo", b: "Substantivo", c: "Advérbio", d: "Adjetivo", correct: "a" },
+      { q: "A palavra 'caixa-d'água' é um exemplo de:", a: "Hífen obrigatório", b: "Hífen proibido", c: "Contração", d: "Aglutinação", correct: "a" },
+
+      // GRAMÁTICA — CLASSES DE PALAVRAS
+      { q: "Na frase 'Ele corre rápido', a palavra 'rápido' é:", a: "Verbo", b: "Advérbio", c: "Adjetivo", d: "Substantivo", correct: "b" },
+      { q: "Qual é o plural de 'pão-duro'?", a: "Pães-duros", b: "Pão-duros", c: "Pães-duro", d: "Pães-duros", correct: "a" },
+      { q: "Na frase 'A menina feliz sorriu', 'feliz' é:", a: "Substantivo", b: "Adjetivo", c: "Verbo", d: "Pronome", correct: "b" },
+      { q: "Na frase 'Eu mesmo fiz o trabalho', 'mesmo' é:", a: "Pronome", b: "Advérbio", c: "Adjetivo", d: "Substantivo", correct: "a" },
+      { q: "O verbo 'poder' no pretérito perfeito do indicativo é:", a: "Pode", b: "Podia", c: "Pôde", d: "Poderia", correct: "c" },
+      { q: "Em 'Eles se abraçaram', o pronome 'se' indica:", a: "Reflexividade", b: "Reciprocidade", c: "Passividade", d: "Ênfase", correct: "b" },
+      { q: "A palavra 'ninguém' é:", a: "Pronome indefinido", b: "Pronome relativo", c: "Advérbio", d: "Conjunção", correct: "a" },
+      { q: "A palavra 'porque' é usada para:", a: "Pergunta", b: "Explicação", c: "Dúvida", d: "Conclusão", correct: "b" },
+      { q: "Em 'Quero que você venha', o termo 'que' é:", a: "Pronome relativo", b: "Conjunção subordinativa", c: "Interjeição", d: "Advérbio", correct: "b" },
+      { q: "A palavra 'embora' pode ser:", a: "Conjunção e advérbio", b: "Pronome e interjeição", c: "Substantivo e adjetivo", d: "Verbo e adjetivo", correct: "a" },
+      { q: "O termo 'muito' é advérbio quando:", a: "Acompanha verbo, adjetivo ou advérbio", b: "Acompanha substantivo", c: "Está no plural", d: "Indica intensidade nominal", correct: "a" },
+      { q: "A palavra 'felizmente' é um:", a: "Substantivo", b: "Adjetivo", c: "Advérbio", d: "Verbo", correct: "c" },
+      { q: "Em 'A casa é grande', o verbo 'é' indica:", a: "Ação", b: "Estado", c: "Desejo", d: "Mudança", correct: "b" },
+      { q: "O coletivo de 'abelha' é:", a: "Colmeia", b: "Enxame", c: "Favo", d: "Rebanho", correct: "b" },
+      { q: "O aumentativo de 'menino' é:", a: "Meninote", b: "Meninão", c: "Meninote", d: "Meninotezão", correct: "b" },
+      { q: "A palavra 'Brasil' é:", a: "Substantivo comum", b: "Substantivo próprio", c: "Adjetivo pátrio", d: "Verbo", correct: "b" },
+      { q: "A forma verbal de 'nós ir' está correta em:", a: "Nós iremos", b: "Nós vai", c: "Nós fomos ir", d: "Nós vai ir", correct: "a" },
+      { q: "A palavra 'depressa' é:", a: "Adjetivo", b: "Advérbio", c: "Substantivo", d: "Conjunção", correct: "b" },
+      { q: "A palavra 'cão' pertence à classe dos:", a: "Verbos", b: "Substantivos", c: "Adjetivos", d: "Advérbios", correct: "b" },
+      { q: "A forma 'trouxeram' é o verbo 'trazer' no tempo:", a: "Presente", b: "Futuro", c: "Pretérito perfeito", d: "Imperativo", correct: "c" },
+]
+  }
+};
+
+
+        const elements = {
+            categorySelection: document.getElementById('category-selection'),
+            quizContent: document.getElementById('quiz-content'),
+            quizSubtitleDisplay: document.getElementById('quiz-subtitle-display'),
+            currentQuestionText: document.getElementById('current-question-text'),
+            quizOptionsContainer: document.getElementById('quiz-options-container'),
+            quizForm: document.getElementById('quiz-form'),
+            checkAnswerButton: document.getElementById('check-answer'),
+            nextQuestionLink: document.getElementById('next-question'),
+            resultContainer: document.getElementById('result-container'),
+            categoryCards: document.querySelectorAll('.category-card'),
+            toolbarQuizLink: document.getElementById('toolbar-quiz-link')
+        };
+
+        let currentCategory = null;
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let isAnswered = false;
+
+        // Função principal para iniciar o Quiz de uma categoria
+        function startQuiz(categoryKey) {
+            currentCategory = categoryKey;
+            const quizData = QUIZZES[categoryKey];
+
+            // Embaralha as perguntas
+            currentQuestions = [...quizData.questions].sort(() => 0.5 - Math.random());
+            currentQuestionIndex = 0;
+
+            elements.quizSubtitleDisplay.innerHTML = `${quizData.title} <i class="mdi ${quizData.icon}"></i>`;
+
+            elements.categorySelection.classList.remove('active');
+            elements.quizContent.classList.add('active');
+
+            loadQuestion();
+        }
+
+        // Carrega a próxima pergunta na tela
+        function loadQuestion() {
+            if (currentQuestionIndex >= currentQuestions.length) {
+                showQuizEnd();
+                return;
+            }
+
+            isAnswered = false;
+            elements.resultContainer.innerHTML = '';
+            elements.checkAnswerButton.style.display = 'block';
+            elements.nextQuestionLink.style.display = 'none';
+            // Garante que o botão comece desativado até uma opção ser escolhida
+            elements.checkAnswerButton.disabled = true; 
+
+            const questionData = currentQuestions[currentQuestionIndex];
+            elements.currentQuestionText.textContent = questionData.q;
+            elements.quizOptionsContainer.innerHTML = '';
+
+            const options = ['a', 'b', 'c', 'd'];
+            options.forEach(optionKey => {
+                const optionText = questionData[optionKey];
+
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.id = `option_${optionKey}`;
+                input.name = 'resposta';
+                input.value = optionKey;
+                // Remove a necessidade de `required` no input
+                // input.required = (optionKey === 'a'); 
+
+                const label = document.createElement('label');
+                label.htmlFor = `option_${optionKey}`;
+                label.className = 'quiz-option clickable';
+                label.textContent = optionText;
+
+                input.addEventListener('change', () => {
+                    // Reativa o botão de verificar assim que uma opção é selecionada
+                    elements.checkAnswerButton.disabled = false;
+                });
+
+                elements.quizOptionsContainer.appendChild(input);
+                elements.quizOptionsContainer.appendChild(label);
+            });
+        }
+
+        // Verifica a resposta do usuário
+        function checkAnswer(e) {
+            e.preventDefault();
+            if (isAnswered) return;
+
+            const selectedOption = elements.quizForm.querySelector('input[name="resposta"]:checked');
+
+            if (!selectedOption) {
+                // CORREÇÃO: Garante que o botão seja desativado, se o erro for mostrado.
+                elements.checkAnswerButton.disabled = true; 
+                elements.resultContainer.innerHTML = '<span class="result-message-incorrect"><i class="mdi mdi-alert-circle"></i> Selecione uma resposta primeiro!</span>';
+                return;
+            }
+
+            isAnswered = true;
+            elements.checkAnswerButton.style.display = 'none';
+            elements.nextQuestionLink.style.display = 'block';
+
+            const questionData = currentQuestions[currentQuestionIndex];
+            const userAnswer = selectedOption.value;
+            const correctAnswer = questionData.correct;
+
+            const allLabels = elements.quizOptionsContainer.querySelectorAll('label.quiz-option');
+            // Desabilita o clique nas outras opções
+            const allInputs = elements.quizOptionsContainer.querySelectorAll('input[type="radio"]');
+            allInputs.forEach(input => input.disabled = true);
+            
+            allLabels.forEach(label => {
+                label.classList.add('answered');
+                // Remove o efeito de clique
+                label.classList.remove('clickable');
+            });
+
+            const correctLabel = document.querySelector(`label[for="option_${correctAnswer}"]`);
+            correctLabel.classList.add('correct');
+
+            if (userAnswer === correctAnswer) {
+                elements.resultContainer.innerHTML = '<span class="result-message-correct"><i class="mdi mdi-check-circle"></i> Resposta Correta!</span>';
+            } else {
+                const incorrectLabel = document.querySelector(`label[for="option_${userAnswer}"]`);
+                // Garante que o label incorreto seja visualmente marcado
+                incorrectLabel.classList.add('incorrect'); 
+                elements.resultContainer.innerHTML = `<span class="result-message-incorrect"><i class="mdi mdi-close-circle"></i> Errado. A correta era a ${correctAnswer.toUpperCase()}.</span>`;
+            }
+
+            elements.nextQuestionLink.textContent = (currentQuestionIndex < currentQuestions.length - 1) ? 'Próxima Pergunta' : 'Finalizar Quiz';
+        }
+
+        // Passa para a próxima pergunta ou volta para o início
+        function nextQuestion(e) {
+            e.preventDefault();
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuestions.length) {
+                loadQuestion();
+            } else {
+                showQuizEnd();
+            }
+        }
+
+        // Exibe a tela de finalização do quiz (simplificado)
+        function showQuizEnd() {
+            elements.currentQuestionText.innerHTML = `<p id="quiz-end-message">Parabéns, você completou o quiz de ${QUIZZES[currentCategory].title}!</p>`;
+            elements.quizOptionsContainer.innerHTML = '';
+            elements.resultContainer.innerHTML = '<span class="result-message-correct"><i class="mdi mdi-star"></i> Mantenha o foco!</span>';
+            elements.checkAnswerButton.style.display = 'none';
+
+            elements.nextQuestionLink.style.display = 'block';
+            elements.nextQuestionLink.textContent = 'Voltar ao Menu';
+
+            // CORREÇÃO: Atribui o reset ao evento de clique do link, e não a função `onclick`
+            elements.nextQuestionLink.removeEventListener('click', nextQuestion);
+            elements.nextQuestionLink.addEventListener('click', resetToCategorySelection);
+        }
+
+        function resetToCategorySelection(e) {
+            e.preventDefault();
+            
+            // Reposiciona os elementos
+            elements.quizContent.classList.remove('active');
+            elements.categorySelection.classList.add('active');
+            
+            // Reajusta o link "Próxima Pergunta" para o comportamento padrão
+            elements.nextQuestionLink.removeEventListener('click', resetToCategorySelection);
+            elements.nextQuestionLink.addEventListener('click', nextQuestion); 
+            elements.nextQuestionLink.textContent = 'Próxima Pergunta'; // Garante o texto original
+            elements.nextQuestionLink.style.display = 'none';
+
+            // Limpa o estado
+            currentCategory = null;
+            currentQuestions = [];
+            currentQuestionIndex = 0;
+            isAnswered = false;
+        }
+
+        // ==========================================================
+        // == Listeners de Eventos                                ==
+        // ==========================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            elements.categoryCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    startQuiz(category);
+                });
+            });
+
+            elements.quizForm.addEventListener('submit', checkAnswer);
+            // CORREÇÃO: O nextQuestion é inicialmente adicionado aqui e não é removido
+            elements.nextQuestionLink.addEventListener('click', nextQuestion);
+            
+            // Garante que o clique na toolbar "Jogos" reinicie o menu
+            if (elements.toolbarQuizLink) {
+                elements.toolbarQuizLink.addEventListener('click', (e) => {
+                    // CORREÇÃO: Verifica se o quiz está ativo (fora da tela de seleção)
+                    if (elements.quizContent.classList.contains('active')) {
+                        resetToCategorySelection(e);
+                    }
+                    // Se estiver na tela de seleção, o link faz a navegação normal (se for Flask/outro framework)
+                });
+            }
+
+        });
+
+    </script>
+</body>
+
+</html>

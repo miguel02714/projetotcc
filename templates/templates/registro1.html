@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Boost - Criar Perfil</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* ========================== */
+        /* === VARIÁVEIS DE CORES === */
+        /* ========================== */
+        :root {
+            --color-dark: #0A1428; /* Fundo Principal */
+            --color-bg-darker: #07111C; /* Para um gradiente sutil */
+            --color-medium-blue: #1A345C; /* Fundo do Card */
+            --color-input-bg: #0d1e3a; /* Fundo do input mais escuro para contraste */
+            --color-accent: #00A6FF;
+            --color-accent-hover: #0088dd;
+            --color-text: #ffffff;
+            --color-muted: rgba(255,255,255,0.6);
+            --radius: 14px;
+            --font: 'Poppins', sans-serif;
+        }
+
+        /* ======================== */
+        /* === ESTILOS GERAIS === */
+        /* ======================== */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: var(--font);
+            background: linear-gradient(135deg, var(--color-dark), var(--color-bg-darker));
+            min-height: 100vh; /* Use min-height para garantir que o body cubra toda a tela */
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Centralização vertical e horizontal garantida */
+            color: var(--color-text);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            padding: 25px;
+            box-sizing: border-box; /* Inclui padding na largura total */
+        }
+
+        /* ======================== */
+        /* === CABEÇALHO === */
+        /* ======================== */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: 700;
+            margin: 0;
+            color: var(--color-text);
+            /* Sombra de texto para o efeito glow/brilho */
+            text-shadow: 0 0 10px rgba(0, 166, 255, 0.4); 
+        }
+
+        .back-arrow {
+            font-size: 1.6em;
+            color: var(--color-text); /* Cor mais clara para o ícone */
+            text-shadow: 0 0 5px rgba(0, 166, 255, 0.2);
+            transition: color 0.2s, transform 0.1s;
+        }
+
+        .back-arrow:hover {
+            color: var(--color-accent);
+        }
+        .back-arrow:active {
+            transform: scale(0.95);
+        }
+
+        /* ======================== */
+        /* === CARD E FORMULÁRIO === */
+        /* ======================== */
+        .card {
+            background: var(--color-medium-blue);
+            padding: 35px 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6); /* Sombra mais forte no card */
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .avatar-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 166, 255, 0.15); /* Fundo do avatar com mais destaque */
+            border: 3px solid var(--color-accent);
+            /* Adicionado brilho sutil ao avatar */
+            box-shadow: 0 0 15px rgba(0, 166, 255, 0.5); 
+        }
+
+        .avatar-circle i {
+            font-size: 50px;
+            color: var(--color-accent);
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--color-text); /* Label mais visível */
+            font-size: 0.9em;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Sombra sutil no label */
+        }
+
+        .form-group input {
+            width: 90%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            outline: none;
+            background: var(--color-input-bg); 
+            color: var(--color-text);
+            font-size: 1em;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 10px rgba(0, 166, 255, 0.7); /* Brilho mais forte no foco */
+        }
+
+        /* ======================== */
+        /* === BOTÃO DE AÇÃO === */
+        /* ======================== */
+        .action-button {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1em;
+            margin-top: 25px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            background: var(--color-accent);
+            color: var(--color-dark);
+            cursor: pointer;
+            transition: 0.3s ease;
+            /* Sombra ajustada para o efeito "glow" azul forte */
+            box-shadow: 0 0 15px var(--color-accent), 0 5px 25px rgba(0, 166, 255, 0.6); 
+        }
+
+        .action-button:hover {
+            background: var(--color-accent-hover);
+            box-shadow: 0 0 20px var(--color-accent), 0 8px 30px rgba(0, 166, 255, 0.8);
+        }
+        .action-button:active {
+            transform: scale(0.98);
+            box-shadow: 0 0 10px var(--color-accent), 0 4px 15px rgba(0, 166, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <a href="{{ url_for('loginentrar') }}" aria-label="Voltar para Login">
+            <i class="fas fa-arrow-left back-arrow"></i>
+        </a>
+        
+        <h1>Criar Conta</h1>
+        
+        <div style="width: 1.6em;"></div>
+    </div>
+
+    <div class="card">
+        
+        <div class="avatar-circle">
+            <i class="fas fa-user"></i>
+        </div>
+
+        <form action="{{ url_for('registro') }}" method="post">
+            
+            <div class="form-group">
+                <label for="nome">Nome Completo</label>
+                <input placeholder="Seu nome..." type="text" id="nome" name="nome" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input placeholder="exemplo@email.com" type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input placeholder="Mínimo 6 caracteres" type="password" id="senha" name="senha" required minlength="6">
+            </div>
+
+            <button type="submit" class="action-button">Criar Conta</button>
+            
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
